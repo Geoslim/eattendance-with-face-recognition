@@ -1,0 +1,102 @@
+{% load static %}
+
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>eAttendance</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="{% static 'plugins/fontawesome-free/css/all.min.css' %}">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- icheck bootstrap -->
+  <link rel="stylesheet" href="{% static 'plugins/icheck-bootstrap/icheck-bootstrap.min.css' %}">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="{% static 'dist/css/adminlte.min.css' %}">
+  <!-- Google Font: Source Sans Pro -->
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+  <style>
+    .contact__map--bg{
+      z-index: -1;
+      position: absolute;
+    top: 0;
+    left: 0;
+}
+    @media (max-width: 991px) {
+   		.demo-card{
+         position: absolute;
+        
+         
+       }
+		}
+  </style>
+</head>
+
+<body class="hold-transition login-page">
+  
+<div class="login-box">
+  <div class="login-logo">
+    <a href=""><b>e</b>Attendance</a>
+  </div>
+  <!-- /.login-logo -->
+  <div class="card">
+    <div class="card-body login-card-body">
+      <p class="login-box-msg">Sign in to start your session</p>
+
+      <form method="POST" action="">
+        {% csrf_token %}
+        {{form|crispy }}
+        <div class="row">
+          <div class="col-8">
+            <div class="icheck-primary">
+              <input type="checkbox" name="remember" id="remember" {>
+              
+              <label for="remember">
+                Remember Me
+              </label>
+            </div>
+          </div>
+          <!-- /.col -->
+          <div class="col-4">
+            <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+          </div>
+          <!-- /.col -->
+        </div>
+      </form>
+
+    </div>
+    <!-- /.login-card-body -->
+  </div>
+  <!-- <div class="card demo-card" style="position: absolute; right:0; top:0; width:250px; padding:0;" id="">
+    <div class="card-header">
+      <h3 class="card-title">Demo Login Details</h3>
+      </div>
+    <div class="card-body">
+      <p class=""> <strong>Username:</strong><em> admin@admin.com </em></p>
+      <p class=""> <strong>Password:</strong><em> password </em></p>
+    </div>
+    <div class="card-footer">
+      <small>Once an employee is added to the platform, his/her login details would be (employee username as user name) & (1234567890 as password)</small>
+    </div>
+  </div> -->
+  <div class="contact__map--bg">
+    <img src="https://www.kjk.africa/assets/images/map-color.png" alt="">
+</div>
+</div>
+<!-- /.login-box -->
+
+<!-- jQuery -->
+<script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
+<!-- Bootstrap 4 -->
+<script src="{% static 'plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<!-- AdminLTE App -->
+<script src="{% static 'dist/js/adminlte.min.js' %}"></script>
+
+</body>
+</html>

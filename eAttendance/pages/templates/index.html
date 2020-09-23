@@ -1,0 +1,124 @@
+{% load static %}
+
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>eAttendance</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="{% static 'plugins/fontawesome-free/css/all.min.css' %}">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- icheck bootstrap -->
+  <link rel="stylesheet" href="{% static 'plugins/icheck-bootstrap/icheck-bootstrap.min.css' %}">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="{% static 'dist/css/adminlte.min.css' %}">
+  <!-- Google Font: Source Sans Pro -->
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+  <style>
+    .contact__map--bg{
+      z-index: -1;
+      position: absolute;
+    top: 0;
+    left: 0;
+}
+    @media (max-width: 991px) {
+   		.demo-card{
+         position: absolute;
+        
+         
+       }
+		}
+  </style>
+</head>
+
+<body class="hold-transition login-page">
+
+    {% if first_name %}
+    <div class="login-box">
+       
+        <div class="card">
+          <div class="card-body login-card-body">
+            <h2 class="login-box-msg">Attendance Taken </h2>
+
+            <p class="login-box-msg">{{ first_name }} {{ last_name }}</p>
+            <p class="login-box-msg">{{ status }}</p>
+            <p class="login-box-msg">{{ attendance_time }}</p>
+           
+          </div>
+          <!-- /.login-card-body -->
+          <a href="{% url 'index' %}" class="btn btn-sm btn-dark btn-block">Close</a>
+        </div>
+        
+      </div>
+    {% endif %}
+
+
+
+<div class="">
+  <div class="login-logo">
+    <a href=""><b>e</b>Attendance</a>
+  </div>
+  
+  <div class="row">
+      <!-- /.login-logo -->
+    <div class="col-md-4 login-box">
+        <div class="card">
+            <div class="card-body login-card-body">
+        
+              <p class="login-box-msg">Click to Clock In/Out Attendance</p>
+              <a href="{% url 'verify' %}" class="btn btn-sm btn-success btn-block">Mark Attendance</a>
+        
+            </div>
+            <!-- /.login-card-body -->
+          </div>
+    </div>
+
+
+    <div class="col-md-4 login-box">
+        <div class="card">
+            <div class="card-body login-card-body">
+        
+              <p class="login-box-msg">Sign in to your dashboard</p>
+              <a href="{% url 'login' %}" class="btn btn-sm btn-success btn-block">Log in</a>
+        
+            </div>
+            <!-- /.login-card-body -->
+          </div>
+    </div>
+
+    <div class="col-md-4 login-box">
+        <div class="card">
+            <div class="card-body login-card-body">
+        
+              <p class="login-box-msg">Write something descriptive later</p>
+              <a href="" class="btn btn-sm btn-success btn-block">Stepping Out/In</a>
+        
+            </div>
+            <!-- /.login-card-body -->
+          </div>
+    </div>
+  
+  </div>
+  
+  <div class="contact__map--bg">
+    <img src="https://www.kjk.africa/assets/images/map-color.png" alt="">
+</div>
+</div>
+<!-- /.login-box -->
+
+<!-- jQuery -->
+<script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
+<!-- Bootstrap 4 -->
+<script src="{% static 'plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<!-- AdminLTE App -->
+<script src="{% static 'dist/js/adminlte.min.js' %}"></script>
+
+</body>
+</html>

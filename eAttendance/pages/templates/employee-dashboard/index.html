@@ -1,0 +1,326 @@
+{% extends "base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+
+<div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <!-- <h1 class="m-0 text-dark">Employee Dashboard</h1> -->
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item active">Employee</li>
+          </ol>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
+  <!-- /.content-header -->
+
+  <!-- Main content -->
+  <section class="content">
+    <div class="container-fluid">
+      <!-- Small boxes (Stat box) -->
+      <div class="row">
+        <div class="col-md-3">
+
+          <!-- Profile Image -->
+          <div class="card card-primary card-outline">
+            <div class="card-body box-profile">
+              <div class="text-center">
+                <img class="profile-user-img img-fluid img-circle"
+                  src="{{ user.profile_image.url }}"
+                     alt="User profile picture">
+              </div>
+
+              <h3 class="profile-username text-center"><b>{{ user.last_name }}</b> {{ user.first_name }}</h3>
+
+              <p class="text-muted text-center">{{ user.designation.title }}</p>
+
+              <ul class="list-group list-group-unbordered mb-3">
+                <li class="list-group-item">
+                {% if user.profile.status == 'Signed In' %}
+                <b>Currently </b><span class=" badge badge-warning float-right">{{ user.profile.status }}</span>
+                {% endif %}
+
+                {% if user.profile.status == 'Signed Out' %}
+                <b>Currently </b><span class=" badge badge-success float-right">{{ user.profile.status }}</span>
+                {% endif %}
+                 
+                </li>
+
+                <li class="list-group-item">
+                  <b>Tasks </b><span class=" badge badge-warning float-right"> Pending</span>
+                </li>
+                <li class="list-group-item">
+                 {% if user.profile.status == 'Signed Out' %}
+                  <b>Signed Out </b><span class="time float-right"><i class="far fa-clock"></i>{{ user.profile.attendance_time }} </span>
+                  {% endif %}
+
+                  {% if user.profile.status == 'Signed In' %}
+                  <b>Signed In </b><span class="time float-right"><i class="far fa-clock"></i> {{ user.profile.attendance_time }}</span>
+                  {% endif %}
+                </li>
+               
+              </ul>
+              
+<!-- 
+              <form action="" method="POST" class="" style="margin:auto;">
+               
+                <input type="checkbox" name="status"  data-toggle="toggle" data-on="" data-off="" data-onstyle="success" data-offstyle="warning" class="text-white">      
+                <button class="btn btn-dark float-right"  >Enter</button>
+              
+            </form> -->
+
+            </div>
+            <!-- /.card-body -->
+            
+          
+            <!-- <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modal-default">
+              Step Out
+            </button>
+
+           
+            <ul class="list-group list-group-unbordered mb-1 p-2">
+              
+              <li class="list-group-item">
+                <b>Currently Stepped out </b><span class="time float-right"><i class="far fa-clock"></i> </span>
+                <span class="badge pulsate badge-secondary">Check Tab for details </span>
+                
+              </li>
+             
+            </ul> -->
+            
+            
+            <div class="modal fade" id="modal-default">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  
+                  <div class="modal-header">
+                    <h4 class="modal-title">Step Out Form</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                   
+                    <form action="" method="POST" class="" style="margin:auto;">
+
+                     
+                      <div class="form-group">
+                        <input type="text" name="user_id" id="" value="" hidden>
+                        <input type="text" name="status" id="" value="0" hidden>
+                        <label for="reason">Please state your reason for stepping out</label>
+                        <textarea class="form-control" rows="3" name="reason" id="reason" placeholder="Enter ..."></textarea>
+
+                      </div>
+                      <button class="btn btn-dark btn-sm float-right">Enter</button>
+                    </form>
+                  </div>
+                  <div class="modal-footer justify-content-between">
+                  
+                  </div>
+                </div>
+                <!-- /.modal-content -->
+              </div>
+              <!-- /.modal-dialog -->
+            </div>
+            <!-- /.modal -->
+          </div>
+          <!-- /.card -->
+
+      
+          <!-- /.card -->
+        </div>
+        <!-- /.col -->
+        <div class="col-md-9">
+          <div class="card">
+            <div class="card-header p-2">
+              <ul class="nav nav-pills ">
+                <li class="nav-item"><a class="nav-link active" href="#timeline" data-toggle="tab">Attendance Timeline</a></li>
+                <li class="nav-item"><a class="nav-link " href="#step" data-toggle="tab">Stepping In/Out</a></li>
+                <li class="nav-item"><a class="nav-link " href="#to-do-list" data-toggle="tab">To-Do's</a></li>
+                <li class="nav-item"><a class="nav-link " href="#details" data-toggle="tab">Details</a></li>
+               
+              </ul>
+            </div><!-- /.card-header -->
+            <div class="card-body">
+              <div class="tab-content">
+            
+                <div class=" active tab-pane" id="timeline">
+                  <!-- The timeline -->
+                  <div class="timeline timeline-inverse">
+                    <!-- timeline time label -->
+                    
+                  
+                    <!-- timeline item -->
+                    {% for attend in attendance %}
+                    {%if attend.status == 'Signed In' %}
+                      
+                   
+                      <div>
+                        <i class="fas fa-user bg-success"></i>
+
+                        <div class="timeline-item">
+                          <span class="time"><i class="far fa-clock"></i> {{ attend.created }}</span>
+
+                          <p class="timeline-header border-0 badge badge-success text-white">{{ attend.status }}</p>
+                        </div>
+                      </div>
+                      {% else %}
+                    <div>
+                      <i class="fas fa-user bg-warning"></i>
+
+                      <div class="timeline-item">
+                        <span class="time"><i class="far fa-clock"></i> {{ attend.created }}</span>
+
+                        <p class="timeline-header border-0 badge badge-warning">{{ attend.status }}</p>
+                      </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                    <!-- END timeline item -->
+                 
+                   
+                    <div>
+                      <i class="far fa-clock bg-gray"></i>
+                    </div>
+                  </div>
+                
+                </div>
+                <!-- /.tab-pane -->
+
+                <div class=" tab-pane" id="step">
+                 
+                  <div class="timeline">
+                  
+                    <!-- timeline item -->
+                    
+                    <div>
+                      <i class="fas fa-walking bg-blue"></i>
+                      <div class="timeline-item">
+                        <span class="time"><i class="fas fa-clock"></i> </span>
+                        <h3 class="timeline-header"><a href="#">  </a> stepped out</h3>
+      
+                        <div class="timeline-body">
+                         
+                         <form action="" method="POST" class="" >
+                           
+                          <input type="text" name="status" value="1" hidden>      
+                          <button class="btn btn-dark btn-sm text-white" style="">Return</button>
+                        
+                      </form>
+                      
+                         
+                        <span class="time badge badge-success text-white "> Returned: <i class="fas fa-clock"></i>  </span>
+
+                        
+
+                        </div>
+                      
+                      </div>
+                    </div>
+                    
+                    <!-- END timeline item -->
+                
+               
+                </div>
+                <!-- /.tab-pane -->
+                
+              </div>
+
+              <div class=" tab-pane" id="to-do-list">
+                <div class="row">
+                
+                  <div class="col-md-12">
+                      <ul class="todo-list" data-widget="todo-list">
+
+                        
+                        
+                        <li>
+                         
+                            <!-- checkbox -->
+                            <div  class="icheck-primary d-inline ml-2">
+                              <input type="checkbox" value="" name="" id="">
+                             
+                            </div>
+                            <!-- todo text -->
+                            <span class="text"></span>
+                            <!-- Emphasis label -->
+                            <small class="badge badge-secondary"><i class="far fa-clock"></i> </small>
+                            <!-- General tools such as edit or delete-->
+                            <div class="tools">
+                             
+                              <form action="" method="POST" style=" display:inline;">
+                                
+                                 
+                                  <input type="text" name="status" id="status" value="" hidden>
+                                  <button class="btn"><i class="fas"></i> </button>
+                                
+                              </form>
+                              
+                            </div>
+
+                        </li>
+                     
+                       
+                      
+                      </ul>
+                  </div>
+                 
+            
+                </div>
+               
+               
+              </div>
+
+              <div class=" tab-pane" id="details">
+                <div class="row">
+                  <div class="col-md-6">
+                    <ul class="list-group list-group-unbordered mb-3">
+                      <li class="list-group-item">
+                        <b>Email Address:</b> <span class="time float-right"> {{ user.email }}</span>
+                      </li>
+                      <li class="list-group-item">
+                        <b>Member Since: </b> <span class="time float-right"> {{ user.member_since }}</span>
+                      </li>
+                      <li class="list-group-item">
+                        <b>Office Hours: </b> <span class="time float-right"> {{  user.designation.time_in  }} - {{  user.designation.time_out  }}</span>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="col-md-6">
+                    <ul class="list-group list-group-unbordered mb-3">
+                      <li class="list-group-item">
+                        <b>Mobile Number:</b> <span class="time float-right"> </span>
+                      </li>
+                      <li class="list-group-item">
+                        <b>Gender: </b> <span class="time float-right"> </span>
+                      </li>
+                      <li class="list-group-item">
+                        <b>Lateness Benchmark: </b> <span class="time float-right"> {{  user.designation.lateness_benchmark  }}</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+               
+              </div>
+              <!-- /.tab-content -->
+            </div><!-- /.card-body -->
+          </div>
+          <!-- /.nav-tabs-custom -->
+        </div>
+        <!-- /.col -->
+      </div>
+    
+    <!-- /.container-fluid -->
+  </section>
+
+
+
+{% endblock %}
