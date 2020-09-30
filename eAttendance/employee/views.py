@@ -109,7 +109,34 @@ def view_employee(request, user_id):
     if not request.user.is_superuser:
         return render(request, 'employee-dashboard/index.html')
    
+   
+@login_required(login_url='login')
+def update_employee(request, user_id):
+    if request.user.is_superuser:
+        
+        if request.method == 'POST': 
+            employeen_update = User.objects.filter(pk=user_id)
+            employeen_update.update(
+                last_name = request.POST['last_name'],
+                first_name = request.POST['first_name'],
+                email = request.POST['email'] ,
+                designation_id = request.POST['designation'],
+                gender = request.POST['gender'],
+                mobile = request.POST['mobile'],
+                member_since = request.POST['member_since'],
+                # profile_image = request.FILES['profile_image'] 
+               
+            )
+            sweetify.info(request, f'Employee updated successfully!', button='Ok', timer=3000)
+            return redirect("all_employees")
+            
+      
     
+    if not request.user.is_superuser:
+        return render(request, 'employee-dashboard/index.html')
+    
+   
+      
 @login_required(login_url='login')
 def delete_employee(request, user_id):
     if request.user.is_superuser:
