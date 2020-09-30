@@ -4,13 +4,20 @@ from django.contrib.auth.decorators import login_required
 from account.models import User
 from .models import Designation
 from attendance.models import Attendance
+from tasks.models import Task
 import sweetify
 
 @login_required(login_url='login')
 def employee_dashboard(request):
     if not request.user.is_superuser:
         attendance = Attendance.objects.filter(user_id=request.user.id).order_by('-created')
-        return render(request, 'employee-dashboard/index.html', {'attendance': attendance})
+        tasks = Task.objects.filter(user_id=user_id).order_by('-created')
+        
+        context = {
+            'attendance': attendance,
+            'tasks': tasks
+        }
+        return render(request, 'employee-dashboard/index.html', context)
     
     if request.user.is_superuser:
         return render(request, 'admin-dashboard/index.html')
@@ -90,10 +97,12 @@ def view_employee(request, user_id):
         designations = Designation.objects.all()
         employee = get_object_or_404(User, pk=user_id)
         attendance = Attendance.objects.filter(user_id=user_id).order_by('-created')
+        tasks = Task.objects.filter(user_id=user_id).order_by('-created')
         context = {
             'employee':employee, 
             'attendance': attendance,
-            'designations': designations
+            'designations': designations,
+            'tasks': tasks
         }
         return render(request, 'admin-dashboard/view-employee.html',context)
     

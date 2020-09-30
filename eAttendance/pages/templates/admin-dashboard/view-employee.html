@@ -57,7 +57,7 @@
                  
                   <b>Tasks </b><span class=" badge badge-warning float-right"> Pending</span>
               
-                 
+                  
                 </li>
 
                 <li class="list-group-item">
@@ -288,41 +288,40 @@
                   
                     <div class="col-md-12">
                         <ul class="todo-list" data-widget="todo-list">
-
-                      
-                          
-                          <li>
-                           
-                              <!-- checkbox -->
-                              <div  class="icheck-primary d-inline ml-2">
-                                <input type="checkbox" value="" name="" id="" >
-                                 <!-- <label for=""></label>  -->
-                              </div>
-                              <!-- todo text -->
-                              <span class="text"></span>
-                              <!-- Emphasis label -->
-                              <small class="badge badge-secondary"><i class="far fa-clock"></i> </small>
-                              <!-- General tools such as edit or delete-->
-                              <div class="tools">
-                               
-                                <form action="" method="POST" style=" display:inline;">
+                          {% for task in tasks %}
+                            <li>
+                            
+                                <!-- checkbox -->
+                                <div  class="icheck-primary d-inline ml-2">
+                                  <input type="checkbox" value="" name="" id="" {% if task.status == 1 %} checked {% endif %}>
+                                  <!-- <label for=""></label>  -->
+                                </div>
+                                <!-- todo text -->
+                                <span class="text">{{ task.task }}</span>
+                                <!-- Emphasis label -->
+                                <small class="badge badge-secondary"><i class="far fa-clock"></i> {{ task.created }}</small>
+                                <!-- General tools such as edit or delete-->
+                                <div class="tools">
+                                
+                                  <form action="{% url 'update_task' task.id %}" method="POST" style=" display:inline;">
+                                    {% csrf_token %} 
+                                      <input type="text" name="employee_id" id="employee_id" value="{{employee.id}}" hidden> 
+                                      <input type="text" name="status" id="status" value="{% if task.status == 1 %}0{% else %}1{% endif %}" hidden>
+                                      <button class="btn" title="{% if task.status == 1 %}Mark as incomplete{% else %}Mark as complete{% endif %}"><i class="fas fa-{% if task.status == 1 %}times{% else %}check{% endif %}"></i> </button>
                                     
-                                     <!-- <input type="text" name="status" id="status" value="" hidden>  -->
-                                    <input type="text" name="status" id="status" value="" hidden>
-                                    <button class="btn"><i class="fas fa-check"></i> </button>
-                                  
-                                </form>
-                                <form action="" method="post" style="display:inline;">
-                                  
-                                    <button class="btn" id="confirm">
-                                      <i onclick="return confirm('Deleting To-Do Item. Are you sure?')" class="fas fa-trash"></i>
-                                    </button>
-                
-                                </form>
-                              </div>
+                                  </form>
+                                  <form action="{% url 'delete_task' task.id %}" method="POST" style="display:inline;">
+                                    {% csrf_token %} 
+                                      <button class="btn" id="confirm">
+                                        <i onclick="return confirm('Deleting To-Do Item. Are you sure?')" class="fas fa-trash"></i>
+                                      </button>
+                  
+                                  </form>
+                                </div>
 
-                          </li>
+                            </li>
                        
+                          {% endfor %}
                          
                         
                         </ul>
@@ -333,7 +332,7 @@
 
                    
                  
-                </div>
+                  </div>
                 </div>
 
                 <div class=" tab-pane" id="details">
@@ -354,10 +353,10 @@
                     <div class="col-md-6">
                       <ul class="list-group list-group-unbordered mb-3">
                         <li class="list-group-item">
-                          <b>Mobile Number:</b> <span class="time float-right"> </span>
+                          <b>Mobile Number:</b> <span class="time float-right"> {{ employee.mobile }}</span>
                         </li>
                         <li class="list-group-item">
-                          <b>Gender: </b> <span class="time float-right"> </span>
+                          <b>Gender: </b> <span class="time float-right"> {{ employee.gender }}</span>
                         </li>
                         <li class="list-group-item">
                           <b>Lateness Benchmark: </b> <span class="time float-right"> {{ employee.designation.lateness_benchmark }}</span>
@@ -376,15 +375,15 @@
                         <div class="form-group">
                           <input type="text" class="form-control" id="first_name" name="first_name" placeholder="Enter First Name" value="{{ employee.first_name }}">
                         </div>
-                        <div class="form-group">                      
-                          <input type="text" class="form-control" id="mobile" name="mobile" placeholder="Enter mobile Number" value="">
+                        <div class="form-group">   
+                          <input type="text" class="form-control" id="mobile" name="mobile" placeholder="Enter mobile Number" value="{{ employee.mobile }}">
                         </div>
                         <div class="form-group">
                         
                           <select name="gender" id="gender" class="form-control">
                             
-                              <option value="Female"> Female</option>
-                              <option value="Male" > Male</option>
+                              <option value="Female" {% if employee.gender == 'F' %} selected {% endif %}> Female</option>
+                              <option value="Male" {% if employee.gender == 'M' %} selected {% endif %}> Male</option>
                             
                           </select>
                         </div>
@@ -406,7 +405,7 @@
                           </select>
                         </div>
                         <div class="form-group">                     
-                          <input type="date" class="form-control" id="member_since" name="member_since"  value="">
+                          <input type="date" class="form-control" id="member_since" name="member_since"  value='{{ employee.member_since|date:"Y-m-d" }}'>
                         </div>
                         <div class="form-group">                     
                           <button type="submit" class="btn btn-dark float-right">Update</button>

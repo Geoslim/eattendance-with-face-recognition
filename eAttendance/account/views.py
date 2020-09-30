@@ -33,6 +33,8 @@ def register(request):
         first_name = request.POST['first_name']
         email = request.POST['email'] 
         designation = request.POST['designation']
+        gender = request.POST['gender']
+        mobile = request.POST['mobile']
         member_since = request.POST['member_since']
         profile_image = request.FILES['profile_image']
         
@@ -74,6 +76,8 @@ def register(request):
                 first_name=first_name, 
                 last_name=last_name, 
                 email=email, 
+                gender=gender, 
+                mobile=mobile, 
                 member_since=member_since, 
                 designation_id=designation, 
                 profile_image=profile_image, 

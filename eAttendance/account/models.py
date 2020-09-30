@@ -14,6 +14,9 @@ def photo_path(instance, filename):
 
 
 class User(AbstractUser):
+    SEX_CHOICES = [('M', 'Male'), ('F', 'Female')]
+    gender = models.CharField(max_length=1, choices=SEX_CHOICES, blank=True)
+    mobile = models.CharField(max_length=14, blank=True)
     profile_image = models.ImageField(default='default.png', upload_to=photo_path)
     member_since = models.DateTimeField(null=True, blank=True)
     designation = models.ForeignKey(Designation, on_delete=models.CASCADE,null=True, blank=True)
