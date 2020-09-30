@@ -38,6 +38,7 @@
                      alt="User profile picture">
               </div>
 
+              <h3 class="profile-username text-center text-success"><em>{{ user.username }}</em></h3>
               <h3 class="profile-username text-center"><b>{{ user.last_name }}</b> {{ user.first_name }}</h3>
 
               <p class="text-muted text-center">{{ user.designation.title }}</p>
@@ -45,11 +46,11 @@
               <ul class="list-group list-group-unbordered mb-3">
                 <li class="list-group-item">
                 {% if user.profile.status == 'Signed In' %}
-                <b>Currently </b><span class=" badge badge-warning float-right">{{ user.profile.status }}</span>
+                <b>Currently </b><span class=" badge badge-success float-right">{{ user.profile.status }}</span>
                 {% endif %}
 
                 {% if user.profile.status == 'Signed Out' %}
-                <b>Currently </b><span class=" badge badge-success float-right">{{ user.profile.status }}</span>
+                <b>Currently </b><span class=" badge badge-warning float-right">{{ user.profile.status }}</span>
                 {% endif %}
                  
                 </li>

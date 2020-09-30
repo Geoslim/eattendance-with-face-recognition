@@ -56,11 +56,11 @@
                           <!-- <td>{{ attend.fullname }}</td> -->
                           <td>
                               {% if attend.status == 'Signed In' %}
-                                <p class="badge badge-warning">{{ attend.status }}</p>
+                                <p class="badge badge-success">{{ attend.status }}</p>
                               {% endif %}
 
                               {% if  attend.status == 'Signed Out' %}
-                                <p class="badge badge-success">{{ attend.status }}</p>
+                                <p class="badge badge-warning">{{ attend.status }}</p>
                               {% endif %}
                           </td>
                           <!-- <td>

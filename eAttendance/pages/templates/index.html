@@ -80,8 +80,9 @@
           </div>
     </div>
 
-
+    
     <div class="col-md-4 login-box">
+      {% if not user.is_authenticated %}
         <div class="card">
             <div class="card-body login-card-body">
         
@@ -91,7 +92,9 @@
             </div>
             <!-- /.login-card-body -->
           </div>
+          {% endif %}
     </div>
+    
 
     <div class="col-md-4 login-box">
         <div class="card">

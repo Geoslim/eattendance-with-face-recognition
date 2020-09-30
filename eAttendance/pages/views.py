@@ -11,7 +11,12 @@ def index(request):
 @login_required(login_url='login')
 def admin_dashboard(request):
     if request.user.is_superuser:
-        return render(request, 'admin-dashboard/index.html')
+        employee_count=len(User.objects.filter(is_superuser = 0))
+        print(employee_count)
+        context = {
+            'employee_count':employee_count
+        }
+        return render(request, 'admin-dashboard/index.html', context)
     
     if not request.user.is_superuser:
         return render(request, 'employee-dashboard/index.html')

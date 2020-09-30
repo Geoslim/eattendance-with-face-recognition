@@ -28,7 +28,7 @@ def verify(request):
         current_image = cv2.imread(f'{path}/{cls}')
         images.append(current_image)
         class_names.append(cls.rsplit('.', 4)[0])
-        
+    # print(images)
     print(class_names)
 
     def find_encodings(images):
@@ -65,13 +65,13 @@ def verify(request):
         
     def mark_attendance(name):
          
-        print(f'\nAttendance taken for {name} successfully!!!')   
+        print(f'\n Taking Attendance for {name} !!')   
        
         current_date_and_time = datetime.datetime.now()
         print('Now          :', current_date_and_time)
         added_time = datetime.timedelta(minutes=3)
         new_time_line = current_date_and_time + added_time
-        print ('Neew Time     :', new_time_line)
+        print ('New Time     :', new_time_line)
         
          # get current user details before marking attendance
         user_profile = User.objects.filter(username=f'{name.lower()}')
@@ -91,7 +91,7 @@ def verify(request):
             ban_time = p.ban_time
         
         if status == 'Signed Out':
-            if current_date_and_time > ban_time:
+            if ban_time == None or current_date_and_time > ban_time:
                 my_profile.update(status='Signed In', ban_time=new_time_line, attendance_time=current_date_and_time)
                 add_attendance(user_id, fullname, email, designation, "Signed In")
         elif status == 'Signed In':
@@ -139,7 +139,7 @@ def verify(request):
                 mark_attendance(name)
                 
             elif not matches[match_index]:
-                name = "WHO YOU BE?"
+                name = "Unknown"
                 # print(name)    
                 y1, x2, y2, x1 = face_loc
                 y1, x2, y2, x1 = y1*4, x2*4, y2*4, x1*4

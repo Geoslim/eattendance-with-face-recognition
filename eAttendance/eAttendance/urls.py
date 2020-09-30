@@ -22,6 +22,7 @@ from pages import views
 from account import views
 from employee import views
 from attendance import views
+from tasks import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -30,6 +31,7 @@ urlpatterns = [
     path('account/', include('account.urls')),
     path('emp/', include('employee.urls')),
     path('attendance/', include('attendance.urls')),
+    path('tasks/', include('tasks.urls')),
     
 ]
 

@@ -36,7 +36,7 @@
                   src="{{ employee.profile_image.url }}"
                      alt="User profile picture" height="10px">
               </div>
-
+              <p class="profile-username text-center text-success"><em>{{ employee.username }}</em></p>
               <h3 class="profile-username text-center">{{ employee.last_name }} {{ employee.first_name }}</h3>
 
               <p class="text-muted text-center">{{ employee.designation.title }}</p>
@@ -45,11 +45,11 @@
                 <li class="list-group-item">
                 
                 {% if employee.profile.status == 'Signed In' %}
-                <b>Currently </b><span class=" badge badge-warning float-right">{{ employee.profile.status }}</span>
+                <b>Currently </b><span class=" badge badge-success float-right">{{ employee.profile.status }}</span>
                 {% endif %}
 
                 {% if employee.profile.status == 'Signed Out' %}
-                <b>Currently </b><span class=" badge badge-success float-right">{{ employee.profile.status }}</span>
+                <b>Currently </b><span class=" badge badge-warning float-right">{{ employee.profile.status }}</span>
                 {% endif %}
                 </li>
 
@@ -116,21 +116,18 @@
               <ul class="nav nav-pills col-md-11">
                 <li class="nav-item"><a class="nav-link active" href="#timeline" data-toggle="tab">Attendance Timeline</a></li>
                 <li class="nav-item"><a class="nav-link " href="#step" data-toggle="tab">Stepping In/Out</a></li>
-                <li class="nav-item"><a class="nav-link " href="#to-do-list" data-toggle="tab">To-Do's</a></li>
+                <li class="nav-item"><a class="nav-link " href="#to-do-list" data-toggle="tab">Tasks</a></li>
                 <li class="nav-item"><a class="nav-link " href="#details" data-toggle="tab">Details</a></li>
                 <li class="nav-item"><a class="nav-link " href="#edit-employee" data-toggle="tab">Edit Employee</a></li>
                
               </ul>
               <span class="col-md-1 float-right">
-                <form action="" method="post">
-                  
-                    <button type="submit" class="btn btn-sm">
-                      <i onclick="return confirm('Deleting Employee. Are you sure?')" class="fa fa-trash text-danger"></i>
-                    </button>
+               
+                    <a href="{% url 'delete_employee' employee.id %}"  class="btn btn-sm">
+                      <i class="fa fa-trash text-danger"></i>
+                    </a>
 
-                </form>
-             
-
+              
               </span>
 
             </div><!-- /.card-header -->
@@ -331,56 +328,12 @@
                         </ul>
                     </div>
                     <div class="col-md-12">
-                        <button type="button" class="btn btn-dark btn-sm float-right mt-1" data-toggle="modal" data-target="#to-do-modal"><i class="fas fa-plus"></i> Add item</button>
+                        <a href="{% url 'add_task' employee.id %}" class="btn btn-dark btn-sm float-right mt-1"><i class="fas fa-plus"></i> Add Task</a>
                     </div>
-                    <div class="modal fade" id="to-do-modal">
-                      <div class="modal-dialog">
-                        <div class="modal-content">
-                          
-                          <div class="modal-header">
-                            <h4 class="modal-title"></h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                              <span aria-hidden="true">&times;</span>
-                            </button>
-                          </div>
-                          <div class="modal-body">
-                        
-                            <form action="" method="POST" id="add_to_do_form" class="" style="margin:auto;">
-        
-                              <div class="form-group">
-                                <input type="text" name="employee_id" id="" value="" hidden>
-                                <input type="hidden" name="action" id="action" value="Add" >
-                                <input type="text" name="status" id="" value="0" hidden>
-                                <input type="text" name="to_do_item" class="form-control" id="item" value="" placeholder="Enter Item Here">
-                              
-                              </div>
 
-                              <div class="form-group">
-                               <select name="priority" id="" class="form-control">
-                                  <option value="Urgent">Urgent</option>
-                                  <option value="High">High</option>
-                                  <option value="Medium" selected>Medium</option>
-                                  <option value="Low">Low</option>
-                                </select>
-        
-                              </div>
-                              <span id="form_result"></span>
-                              <button type="submit" class="btn btn-dark btn-sm float-right">Add</button>
-                            </form>
-                          </div>
-                          <div class="modal-footer justify-content-between">
-                             <!-- <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>  -->
-                             <!-- <button type="button" class="btn btn-dark btn-sm">Save changes</button> -->
-                          </div>
-                        </div>
-                        <!-- /.modal-content -->
-                      </div>
-                      <!-- /.modal-dialog -->
-                    </div>
-                    <!-- /.modal -->
-                  </div>
-                  
+                   
                  
+                </div>
                 </div>
 
                 <div class=" tab-pane" id="details">
@@ -391,7 +344,7 @@
                           <b>Email Address:</b> <span class="time float-right"> {{ employee.email }}</span>
                         </li>
                         <li class="list-group-item">
-                          <b>Member Since: </b> <span class="time float-right"> {{ employee.member_since }}</span>
+                          <b>Member Since: </b> <span class="time float-right"> {{ employee.member_since|date:"jS M, Y " }}</span>
                         </li>
                         <li class="list-group-item">
                           <b>Office Hours: </b> <span class="time float-right"> {{ employee.designation.time_in }} - {{ employee.designation.time_out }}</span>
@@ -419,9 +372,9 @@
                   <form action="  " method="POST" enctype="multipart/form-data">
                    
                     <div class="row">
-                      <div class="col-md-6">
+                      <div class="col-md-4">
                         <div class="form-group">
-                          <input type="text" class="form-control" id="fullname" name="fullname" placeholder="Enter Full Name" value="">
+                          <input type="text" class="form-control" id="first_name" name="first_name" placeholder="Enter First Name" value="{{ employee.first_name }}">
                         </div>
                         <div class="form-group">                      
                           <input type="text" class="form-control" id="mobile" name="mobile" placeholder="Enter mobile Number" value="">
@@ -434,35 +387,46 @@
                               <option value="Male" > Male</option>
                             
                           </select>
+                        </div>
+                      
                       </div>
-                      <div class="form-group">
-                     
-                          <div class="input-group">
-                            <div class="custom-file">
-                              <input type="file" class="custom-file-input" id="profile_image" name="profile_image">
-                              <label class="custom-file-label" for="profile_image">Choose file</label>
-                            </div>
-                         
-                          </div>
-                      </div>
-                      </div>
-                      <div class="col-md-6">
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Enter Last Name" value="{{ employee.last_name }}">
+                        </div>
                         <div class="form-group">                     
-                          <input type="text" class="form-control" id="email" name="email" placeholder="Enter Email Address" value="">
+                          <input type="text" class="form-control" id="email" name="email" placeholder="Enter Email Address" value="{{ employee.email }}">
                         </div>
                         <div class="form-group">
                           <select name="designation" id="designation" class="form-control">
-                           
-                              <option value="" > </option>
+                            {% for designation in designations %}
+                            <option value="{{ designation.id }}" {% if employee.designation_id == designation.id %} selected {% endif %} > {{ designation.title }}</option>
+                            {% endfor %}
                            
                           </select>
-                      </div>
+                        </div>
                         <div class="form-group">                     
                           <input type="date" class="form-control" id="member_since" name="member_since"  value="">
                         </div>
                         <div class="form-group">                     
                           <button type="submit" class="btn btn-dark float-right">Update</button>
                         </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="form-group">
+                                
+                          <label for="profile_image">Profile Image</label>
+                          <div class="dash-picture">
+                              <img id="preview_img" src="{{ employee.profile_image.url }}" class="" width="50%" height="" style="display: block;">
+                          </div>
+                          <div class="input-group" style="">
+                              <div class="custom-file">
+                                  <input type="file" class="custom-file-input dash-browse file" id="profile_image" name="profile_image" onchange="loadPreview(this);">
+                                  <label class="custom-file-label" for="profile_image">Choose file</label>
+                              </div>
+                          
+                          </div>
+                      </div>
                       </div>
                     </div>
                   </form>

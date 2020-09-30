@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'attendance.apps.AttendanceConfig',
     'pages.apps.PagesConfig',
     'employee.apps.EmployeeConfig',
+    'tasks.apps.TasksConfig',
     'sweetify',
     'crispy_forms',
 ]

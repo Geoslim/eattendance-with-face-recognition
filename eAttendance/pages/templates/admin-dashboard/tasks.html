@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0 text-dark">Designations</h1>
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item active">Designations</li>
+          </ol>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
+  <!-- /.content-header -->
+
+  <!-- Main content -->
+  <section class="content">
+    <div class="container-fluid">
+      <!-- Small boxes (Stat box) -->
+      <div class="row">
+        <div class="col-md-3">
+            <div class="card card-dark" >
+                <div class="card-header">
+                <h3 class="card-title">Add </h3>
+                </div>
+                <!-- /.card-header -->
+                <!-- form start -->
+                <form action="" method="POST" id="add_to_do_form" class="" style="margin:auto;">
+        
+                    <div class="form-group">
+                      <input type="text" name="employee_id" id="" value="{{ employee.id }}" hidden>
+                      <!-- <input type="hidden" name="action" id="action" value="Add" > -->
+                      <!-- <input type="text" name="status" id="" value="0" hidden> -->
+                      <input type="text" name="to_do_item" class="form-control" id="item" value="" placeholder="Enter Task Here">
+                    
+                    </div>
+
+                    <div class="form-group">
+                     <select name="priority" id="" class="form-control">
+                        <option value="Urgent">Urgent</option>
+                        <option value="High">High</option>
+                        <option value="Medium" selected>Medium</option>
+                        <option value="Low">Low</option>
+                      </select>
+
+                    </div>
+                    <span id="form_result"></span>
+                    <button type="submit" class="btn btn-dark btn-sm float-right">Add</button>
+                  </form>
+            </div>
+        </div>
+
+        <div class="col-md-9" style="">
+            <div class="card card-dark">
+                <div class="card-header">
+                  <h3 class="card-title">Employee </h3>
+                </div>
+                <!-- /.card-header -->
+               
+                <div class="card-body">
+                    <table class="table table-bordered table-hover" id="table-data">
+                      <thead>                  
+                        <tr>
+                          <th style="">#</th>
+                          <th>Title</th>
+                          <th>Schedule</th>
+                          <th>Lateness Benchmark</th>
+                         
+                          <th>Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      
+                        
+                        <tr>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                        
+                          
+                          <td>
+                            <a href="" class="btn btn-dark btn-sm">Edit</a>
+                          </td>
+                        
+                        </tr>
+                        
+                      </tbody>
+                    </table>
+                  </div>
+                  <!-- /.card-body -->
+                
+                    <!-- <h3 class="text-center">No Designation to render</h3> -->
+               
+               
+              </div>
+        </div>
+
+      </div>
+   
+    </div>
+    <!-- /.container-fluid -->
+  </section>
+
+{% endblock %}

@@ -14,9 +14,7 @@ def employee_dashboard(request):
     
     if request.user.is_superuser:
         return render(request, 'admin-dashboard/index.html')
-       
-       
-       
+      
     
 @login_required(login_url='login')
 def designations(request):
@@ -34,12 +32,7 @@ def designations(request):
                 return redirect("designation")
             
             else:    
-                designation = Designation.objects.create(
-                          title = title,
-                          time_in = time_in,
-                          time_out = time_out,
-                          lateness_benchmark = lateness_benchmark,
-                    )
+                designation = Designation.objects.create(title = title, time_in = time_in, time_out = time_out, lateness_benchmark = lateness_benchmark)
                 designation.save()
                 sweetify.info(request, f'Designation for {title} created successfully!', button='Ok', timer=3000)
                 return redirect("designation")
@@ -48,8 +41,7 @@ def designations(request):
     
     if not request.user.is_superuser:
         return render(request, 'employee-dashboard/index.html')
-    
-    
+       
     
 @login_required(login_url='login')
 def edit_designation(request, designation_id):
@@ -78,10 +70,7 @@ def edit_designation(request, designation_id):
     if not request.user.is_superuser:
         return render(request, 'employee-dashboard/index.html')
     
-    
-    
-    
-    
+   
         
 @login_required(login_url='login')
 def all_employees(request):
@@ -93,16 +82,38 @@ def all_employees(request):
     if not request.user.is_superuser:
         return render(request, 'employee-dashboard/index.html')
     
-    
-    
+        
         
 @login_required(login_url='login')
 def view_employee(request, user_id):
     if request.user.is_superuser:
+        designations = Designation.objects.all()
         employee = get_object_or_404(User, pk=user_id)
         attendance = Attendance.objects.filter(user_id=user_id).order_by('-created')
+        context = {
+            'employee':employee, 
+            'attendance': attendance,
+            'designations': designations
+        }
+        return render(request, 'admin-dashboard/view-employee.html',context)
+    
+    if not request.user.is_superuser:
+        return render(request, 'employee-dashboard/index.html')
+   
+    
+@login_required(login_url='login')
+def delete_employee(request, user_id):
+    if request.user.is_superuser:
+        employee = get_object_or_404(User, pk=user_id)
+        if request.method == "POST":
+            employee.delete()
+            sweetify.info(request, "Employee Deleted Successfully", button='Ok', timer=3000)
+            return redirect("all_employees")
+        context = {
+           "employee" : employee
+       }
         
-        return render(request, 'admin-dashboard/view-employee.html', {'employee':employee, 'attendance': attendance})
+        return render(request, 'admin-dashboard/delete-employee.html', context)
     
     if not request.user.is_superuser:
         return render(request, 'employee-dashboard/index.html')

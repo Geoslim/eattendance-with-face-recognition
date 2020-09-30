@@ -23,7 +23,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     username = models.CharField(max_length=150, null=True, blank=True)
     status = models.CharField(max_length=100, default='Signed Out' ,blank=True)
-    ban_time = models.DateTimeField(default=None, null=True, blank=True)
+    ban_time = models.DateTimeField(auto_now_add=True)
     attendance_time = models.DateTimeField(default=None, null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
