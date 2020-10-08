@@ -10,17 +10,21 @@ import sweetify
 @login_required(login_url='login')
 def employee_dashboard(request):
     if not request.user.is_superuser:
-        attendance = Attendance.objects.filter(user_id=request.user.id).order_by('-created')
-        tasks = Task.objects.filter(user_id=user_id).order_by('-created')
-        
+        attendance = Attendance.objects.filter(user_id=request.user).order_by('-created')
+        tasks = Task.objects.filter(user_id=request.user).order_by('-created')
+        pending_tasks = Task.objects.filter(user_id=request.user,status=False)
+        count_pending_tasks = len(pending_tasks)
+        print(count_pending_tasks)
         context = {
             'attendance': attendance,
-            'tasks': tasks
+            'tasks': tasks,
+            'count_pending_tasks': count_pending_tasks,
         }
         return render(request, 'employee-dashboard/index.html', context)
     
     if request.user.is_superuser:
-        return render(request, 'admin-dashboard/index.html')
+        sweetify.info(request, 'Welcome back', button='Ok', timer=3000)
+        return redirect("admin_dashboard")
       
     
 @login_required(login_url='login')
@@ -47,7 +51,8 @@ def designations(request):
             return render(request, 'admin-dashboard/designation.html', {'designations':designations})
     
     if not request.user.is_superuser:
-        return render(request, 'employee-dashboard/index.html')
+        sweetify.info(request, 'Welcome back', button='Ok', timer=3000)
+        return redirect("employee_dashboard")
        
     
 @login_required(login_url='login')
@@ -75,7 +80,8 @@ def edit_designation(request, designation_id):
             return render(request, 'admin-dashboard/designation.html', context)
     
     if not request.user.is_superuser:
-        return render(request, 'employee-dashboard/index.html')
+        sweetify.info(request, 'Welcome back', button='Ok', timer=3000)
+        return redirect("employee_dashboard")
     
    
         
@@ -87,7 +93,8 @@ def all_employees(request):
         return render(request, 'admin-dashboard/all-employees.html', {'all_employees':all_employees})
     
     if not request.user.is_superuser:
-        return render(request, 'employee-dashboard/index.html')
+        sweetify.info(request, 'Welcome back', button='Ok', timer=3000)
+        return redirect("employee_dashboard")
     
         
         
@@ -107,7 +114,8 @@ def view_employee(request, user_id):
         return render(request, 'admin-dashboard/view-employee.html',context)
     
     if not request.user.is_superuser:
-        return render(request, 'employee-dashboard/index.html')
+        sweetify.info(request, 'Welcome back', button='Ok', timer=3000)
+        return redirect("employee_dashboard")
    
    
 @login_required(login_url='login')
@@ -115,8 +123,8 @@ def update_employee(request, user_id):
     if request.user.is_superuser:
         
         if request.method == 'POST': 
-            employeen_update = User.objects.filter(pk=user_id)
-            employeen_update.update(
+            employee_update = User.objects.filter(pk=user_id)
+            employee_update.update(
                 last_name = request.POST['last_name'],
                 first_name = request.POST['first_name'],
                 email = request.POST['email'] ,
@@ -128,12 +136,13 @@ def update_employee(request, user_id):
                
             )
             sweetify.info(request, f'Employee updated successfully!', button='Ok', timer=3000)
-            return redirect("all_employees")
+            return redirect("view_employee", user_id)
             
       
     
     if not request.user.is_superuser:
-        return render(request, 'employee-dashboard/index.html')
+        sweetify.info(request, 'Welcome back', button='Ok', timer=3000)
+        return redirect("employee_dashboard")
     
    
       
@@ -152,4 +161,5 @@ def delete_employee(request, user_id):
         return render(request, 'admin-dashboard/delete-employee.html', context)
     
     if not request.user.is_superuser:
-        return render(request, 'employee-dashboard/index.html')
+        sweetify.info(request, 'Welcome back', button='Ok', timer=3000)
+        return redirect("employee_dashboard")

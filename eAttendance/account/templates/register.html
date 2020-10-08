@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% load crispy_forms_tags %}
 {% block content %}
 
@@ -112,8 +112,9 @@
                                 
                                     <label for="profile_image">Profile Image</label>
                                     <div class="dash-picture">
-                                        <img id="preview_img" src="https://www.w3adda.com/wp-content/uploads/2019/09/No_Image-128.png" class="" width="100%" height="" style="display: block;">
+                                        <img id="preview_img" src="{% static 'dist/img/avatar5.png' %}" class="" width="100%" height="" style="display: block;">
                                     </div>
+                                    
                                     <div class="input-group" style="">
                                         <div class="custom-file">
                                             <input type="file" class="custom-file-input dash-browse file" id="profile_image" name="profile_image" onchange="loadPreview(this);">

@@ -41,7 +41,7 @@ def add_task(request, user_id):
 def update_task(request, task_id):
 
     # status = request.POST['status']
-    # employee_id = request.POST['employee_id']
+    employee_id = request.POST['employee_id']
     
     employee_task = Task.objects.filter(pk=task_id)
     for task in employee_task:
@@ -49,14 +49,38 @@ def update_task(request, task_id):
         
     if this_status == 0:
         employee_task.update(status=1)
-        sweetify.info(request, f"Task marked as complete Successfully", button='Ok', timer=3000)
-        return redirect("all_employees")
+        sweetify.info(request, f"Task marked as complete ", button='Ok', timer=3000)
+        return redirect("view_employee", employee_id)
     
     if this_status == 1:
         employee_task.update(status=0)
-        sweetify.info(request, f"Task marked as incomplete Successfully", button='Ok', timer=3000)
-        return redirect("all_employees")
+        sweetify.info(request, f"Task marked as incomplete ", button='Ok', timer=3000)
+        return redirect("view_employee", employee_id)
     
+
+
+@login_required(login_url='login')
+def employee_update_task(request, task_id):
+
+    # status = request.POST['status']
+    employee_id = request.POST['employee_id']
+    
+    employee_task = Task.objects.filter(pk=task_id)
+    for task in employee_task:
+        this_status = task.status
+        
+    if this_status == 0:
+        employee_task.update(status=1)
+        sweetify.info(request, f"Task marked as complete ", button='Ok', timer=3000)
+        return redirect('employee_dashboard')
+    
+    if this_status == 1:
+        employee_task.update(status=0)
+        sweetify.info(request, f"Task marked as incomplete ", button='Ok', timer=3000)
+        return redirect('employee_dashboard')
+    
+
+
 
 @login_required(login_url='login')
 def delete_task(request, task_id):

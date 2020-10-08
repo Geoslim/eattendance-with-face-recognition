@@ -11,7 +11,7 @@ class UserAdmin(BaseUserAdmin):
     fieldsets = (
         ('Account', {'fields': ('email', 'password','profile_image')}),
         ('Personal info', {'fields': ('first_name', 'last_name')}),
-        ('Permissions', {'fields': ('is_superuser','is_staff', 'is_active','groups')}),
+        ('Permissions', {'fields': ('is_superuser','is_staff', 'is_active','groups','user_permissions')}),
     )
     
 admin.site.register(User, UserAdmin)

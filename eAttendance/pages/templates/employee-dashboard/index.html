@@ -54,10 +54,16 @@
                 {% endif %}
                  
                 </li>
-
+                
                 <li class="list-group-item">
-                  <b>Tasks </b><span class=" badge badge-warning float-right"> Pending</span>
+                  {% if count_pending_tasks > 0 %}
+                    <b>Tasks </b><span class=" badge badge-warning float-right">{{ count_pending_tasks }} Pending </span>
+                  {% else %}
+                    <b>Tasks </b><span class=" badge badge-success float-right">None </span>
+                  {% endif %}
                 </li>
+                
+
                 <li class="list-group-item">
                  {% if user.profile.status == 'Signed Out' %}
                   <b>Signed Out </b><span class="time float-right"><i class="far fa-clock"></i>{{ user.profile.attendance_time }} </span>
@@ -70,14 +76,6 @@
                
               </ul>
               
-<!-- 
-              <form action="" method="POST" class="" style="margin:auto;">
-               
-                <input type="checkbox" name="status"  data-toggle="toggle" data-on="" data-off="" data-onstyle="success" data-offstyle="warning" class="text-white">      
-                <button class="btn btn-dark float-right"  >Enter</button>
-              
-            </form> -->
-
             </div>
             <!-- /.card-body -->
             
@@ -98,7 +96,7 @@
             </ul> -->
             
             
-            <div class="modal fade" id="modal-default">
+            <!-- <div class="modal fade" id="modal-default">
               <div class="modal-dialog">
                 <div class="modal-content">
                   
@@ -127,10 +125,10 @@
                   
                   </div>
                 </div>
-                <!-- /.modal-content -->
+                
               </div>
-              <!-- /.modal-dialog -->
-            </div>
+              
+            </div> -->
             <!-- /.modal -->
           </div>
           <!-- /.card -->
@@ -239,41 +237,45 @@
                 <div class="row">
                 
                   <div class="col-md-12">
-                      <ul class="todo-list" data-widget="todo-list">
-
-                        
-                        
+                    <ul class="todo-list" data-widget="todo-list">
+                      {% for task in tasks %}
                         <li>
-                         
+                        
                             <!-- checkbox -->
                             <div  class="icheck-primary d-inline ml-2">
-                              <input type="checkbox" value="" name="" id="">
-                             
+                              <input type="checkbox" value="" name="" id="" {% if task.status == 1 %} checked {% endif %}>
+                              <!-- <label for=""></label>  -->
                             </div>
                             <!-- todo text -->
-                            <span class="text"></span>
+                            <span class="text">{{ task.task }}</span>
                             <!-- Emphasis label -->
-                            <small class="badge badge-secondary"><i class="far fa-clock"></i> </small>
+                            <small class="badge badge-secondary"><i class="far fa-clock"></i> {{ task.created }}</small>
                             <!-- General tools such as edit or delete-->
                             <div class="tools">
-                             
-                              <form action="" method="POST" style=" display:inline;">
-                                
-                                 
-                                  <input type="text" name="status" id="status" value="" hidden>
-                                  <button class="btn"><i class="fas"></i> </button>
+                            
+                              <form action="{% url 'employee_update_task' task.id %}" method="POST" style=" display:inline;">
+                                {% csrf_token %} 
+                                  <input type="text" name="employee_id" id="employee_id" value="{{employee.id}}" hidden> 
+                                  <input type="text" name="status" id="status" value="{% if task.status == 1 %}0{% else %}1{% endif %}" hidden>
+                                  <button class="btn" title="{% if task.status == 1 %}Mark as incomplete{% else %}Mark as complete{% endif %}"><i class="fas fa-{% if task.status == 1 %}times{% else %}check{% endif %}"></i> </button>
                                 
                               </form>
-                              
+                              <form action="{% url 'delete_task' task.id %}" method="POST" style="display:inline;">
+                                {% csrf_token %} 
+                                  <button class="btn" id="confirm">
+                                    <i onclick="return confirm('Deleting To-Do Item. Are you sure?')" class="fas fa-trash"></i>
+                                  </button>
+              
+                              </form>
                             </div>
 
                         </li>
+                   
+                      {% endfor %}
                      
-                       
-                      
-                      </ul>
-                  </div>
-                 
+                    
+                    </ul>
+                </div>
             
                 </div>
                
@@ -298,10 +300,10 @@
                   <div class="col-md-6">
                     <ul class="list-group list-group-unbordered mb-3">
                       <li class="list-group-item">
-                        <b>Mobile Number:</b> <span class="time float-right"> </span>
+                        <b>Mobile Number:</b> <span class="time float-right"> {{ user.mobile }}</span>
                       </li>
                       <li class="list-group-item">
-                        <b>Gender: </b> <span class="time float-right"> </span>
+                        <b>Gender: </b> <span class="time float-right"> {{ user.gender }}</span>
                       </li>
                       <li class="list-group-item">
                         <b>Lateness Benchmark: </b> <span class="time float-right"> {{  user.designation.lateness_benchmark  }}</span>

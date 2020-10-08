@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from account.models import User
 # User = get_user_model()
+import sweetify
 
 def index(request):
     context = {'name':'George'}
@@ -19,5 +20,7 @@ def admin_dashboard(request):
         return render(request, 'admin-dashboard/index.html', context)
     
     if not request.user.is_superuser:
-        return render(request, 'employee-dashboard/index.html')
+        sweetify.info(request, 'Welcome back', button='Ok', timer=3000)
+        return redirect("employee_dashboard")
+        # return render(request, 'employee-dashboard/index.html')
 

@@ -144,3 +144,14 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 LOGIN_REDIRECT_URL = 'admin_dashboard'
 
 LOGIN_URL = 'login'
+
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  
+MAILER_EMAIL_BACKEND = EMAIL_BACKEND  
+EMAIL_HOST = 'smtp.googlemail.com'  
+EMAIL_HOST_PASSWORD = 'spnoqwrqlletounw'  
+EMAIL_HOST_USER = 'igeo273@gmail.com'  
+EMAIL_PORT = MAIL_PORT=587  
+EMAIL_USE_TLS = True  
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
