@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>eAttendance</title>
+  <title>{{ page_title }} {% if page_title %}|{% endif %} eAttendance</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Font Awesome -->
@@ -163,7 +163,21 @@
             <a href="{% url 'employee_dashboard' %}" class="nav-link">
               <i class="nav-icon fas fa-thumbs-up"></i>
               <p>
-                Employee Dashboard
+                Dashboard
+                <!-- Employee Dashboard -->
+                 <!-- <span class="right badge badge-danger">New</span>  -->
+              </p>
+            </a>
+          </li>
+          {% endif %}
+
+          {% if not request.user.is_superuser %}  
+          <li class="nav-item">
+            <a href="{% url 'employee_profile' %}" class="nav-link">
+              <i class="nav-icon fas fa-user-lock"></i>
+              <p>
+                Profile
+                <!-- Employee Dashboard -->
                  <!-- <span class="right badge badge-danger">New</span>  -->
               </p>
             </a>

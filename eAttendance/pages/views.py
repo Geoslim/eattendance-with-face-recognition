@@ -4,10 +4,27 @@ from django.contrib.auth.decorators import login_required
 from account.models import User
 # User = get_user_model()
 import sweetify
+import datetime 
+# import timeago
 
 def index(request):
-    context = {'name':'George'}
-    return render(request, 'index.html', context)
+    # datetime_str_1 = '12:55:26'
+    # datetime_str_2 = '08:30:00'
+    # datetime_object_1 = datetime.datetime.strptime(datetime_str_1, '%H:%M:%S').time()
+    # datetime_object_2 = datetime.datetime.strptime(datetime_str_2, '%H:%M:%S').time()
+    # datetime_object_3 =  datetime.datetime.combine(datetime.datetime.now(), datetime_object_1)
+    # datetime_object_4 =  datetime.datetime.combine(datetime.datetime.now(), datetime_object_2)
+    # print(datetime_object_1)
+    # print(datetime_object_2)
+    # print(datetime_object_3)
+    # print(datetime_object_4)
+    
+    
+    # print()
+    # print (timeago.format(datetime_object_4, datetime_object_3))
+    
+    # context = {'page_title':'George'}
+    return render(request, 'index.html')
 
 @login_required(login_url='login')
 def admin_dashboard(request):
@@ -15,7 +32,8 @@ def admin_dashboard(request):
         employee_count=len(User.objects.filter(is_superuser = 0))
         print(employee_count)
         context = {
-            'employee_count':employee_count
+            'employee_count':employee_count,
+            'page_title':'Dashboard',
         }
         return render(request, 'admin-dashboard/index.html', context)
     

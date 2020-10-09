@@ -10,7 +10,7 @@ urlpatterns = [
     # path('login/', views.user_login, name = 'login'),
     path('add-employee/', views.register, name = 'register'),
     
-
+    path('change-password/', views.change_password, name = 'change_password'),  
    
     
 ]

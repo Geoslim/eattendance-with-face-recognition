@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordChangeForm
 from account.models import User
 from .models import Designation
 from attendance.models import Attendance
@@ -14,19 +15,32 @@ def employee_dashboard(request):
         tasks = Task.objects.filter(user_id=request.user).order_by('-created')
         pending_tasks = Task.objects.filter(user_id=request.user,status=False)
         count_pending_tasks = len(pending_tasks)
-        print(count_pending_tasks)
         context = {
             'attendance': attendance,
             'tasks': tasks,
             'count_pending_tasks': count_pending_tasks,
+            'page_title':'Dashboard'
         }
         return render(request, 'employee-dashboard/index.html', context)
     
     if request.user.is_superuser:
         sweetify.info(request, 'Welcome back', button='Ok', timer=3000)
         return redirect("admin_dashboard")
-      
     
+    
+@login_required(login_url='login')
+def employee_profile(request):
+    if not request.user.is_superuser:
+        form = PasswordChangeForm(request.user)
+        return render(request, 'employee-dashboard/profile.html', {'form': form, 'page_title':'Profile'})
+    
+    if request.user.is_superuser:
+        sweetify.info(request, 'Welcome back', button='Ok', timer=3000)
+        return redirect("admin_dashboard")
+      
+
+    
+        
 @login_required(login_url='login')
 def designations(request):
     if request.user.is_superuser:
@@ -48,7 +62,7 @@ def designations(request):
                 sweetify.info(request, f'Designation for {title} created successfully!', button='Ok', timer=3000)
                 return redirect("designation")
         else:
-            return render(request, 'admin-dashboard/designation.html', {'designations':designations})
+            return render(request, 'admin-dashboard/designation.html', {'designations':designations, 'page_title':'Designations'})
     
     if not request.user.is_superuser:
         sweetify.info(request, 'Welcome back', button='Ok', timer=3000)
@@ -76,6 +90,7 @@ def edit_designation(request, designation_id):
             context = {
                 'designations': designations,
                 'designation_edit': designation_edit,
+                'page_title':f'Edit {designation_edit.title}'
             }
             return render(request, 'admin-dashboard/designation.html', context)
     
@@ -90,7 +105,7 @@ def all_employees(request):
     if request.user.is_superuser:
         all_employees = User.objects.filter(is_superuser=0)
         # print(all_employees)
-        return render(request, 'admin-dashboard/all-employees.html', {'all_employees':all_employees})
+        return render(request, 'admin-dashboard/all-employees.html', {'all_employees':all_employees, 'page_title':'All Employees'})
     
     if not request.user.is_superuser:
         sweetify.info(request, 'Welcome back', button='Ok', timer=3000)
@@ -109,7 +124,8 @@ def view_employee(request, user_id):
             'employee':employee, 
             'attendance': attendance,
             'designations': designations,
-            'tasks': tasks
+            'tasks': tasks,
+            'page_title':f'Viewing {employee.username}',
         }
         return render(request, 'admin-dashboard/view-employee.html',context)
     
@@ -155,7 +171,8 @@ def delete_employee(request, user_id):
             sweetify.info(request, "Employee Deleted Successfully", button='Ok', timer=3000)
             return redirect("all_employees")
         context = {
-           "employee" : employee
+           "employee" : employee,
+            'page_title':f'Deleting {employee.username}',
        }
         
         return render(request, 'admin-dashboard/delete-employee.html', context)

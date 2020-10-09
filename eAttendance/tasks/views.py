@@ -28,7 +28,8 @@ def add_task(request, user_id):
             sweetify.info(request, f"Task added to {employee.username} Successfully", button='Ok', timer=3000)
             return redirect("all_employees")
         context = {
-           "employee" : employee
+           "employee" : employee,
+           'page_title':f'Add Task to {employee.username}',
        }
         
         return render(request, 'admin-dashboard/tasks.html', context)

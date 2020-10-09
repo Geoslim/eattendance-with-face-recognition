@@ -9,6 +9,7 @@ import numpy as np
 import face_recognition
 import os
 import datetime
+import timeago
 
 User = get_user_model()
 
@@ -50,8 +51,10 @@ def verify(request):
         context = {'first_name':first_name,
                     'last_name':last_name,
                     'status':status,
-                    'attendance_time':attendance_time,}
-        return context    
+                    'attendance_time':attendance_time,
+                    }
+        return context   
+     
     def add_attendance(user_id, fullname, email, designation, status):
         attendance = Attendance.objects.create(
                         user_id = user_id,
@@ -69,7 +72,7 @@ def verify(request):
        
         current_date_and_time = datetime.datetime.now()
         print('Now          :', current_date_and_time)
-        added_time = datetime.timedelta(minutes=3)
+        added_time = datetime.timedelta(minutes=1)
         new_time_line = current_date_and_time + added_time
         print ('New Time     :', new_time_line)
         
@@ -80,6 +83,8 @@ def verify(request):
             fullname = user.last_name + " " + user.first_name
             email = user.email
             designation = user.designation.title
+            lateness_benchmark_time = datetime.datetime.strptime(user.designation.lateness_benchmark, '%H:%M:%S').time()
+            lateness_benchmark =  datetime.datetime.combine(datetime.datetime.now(), lateness_benchmark_time)
             # status = user.profile.status
             # attendance_time = user.profile.attendance_time
             ban_time = user.profile.ban_time
@@ -90,10 +95,19 @@ def verify(request):
             status = p.status
             ban_time = p.ban_time
         
-        if status == 'Signed Out':
+        if status == 'Signed Out': 
             if ban_time == None or current_date_and_time > ban_time:
+              
+                print()
+               
+                if current_date_and_time > lateness_benchmark:
+                    
+                    late = timeago.format(lateness_benchmark, current_date_and_time)
+                    print(f"You are late ooo..You passed you lateness benchmark  {late}.")
+                    
                 my_profile.update(status='Signed In', ban_time=new_time_line, attendance_time=current_date_and_time)
                 add_attendance(user_id, fullname, email, designation, "Signed In")
+                
         elif status == 'Signed In':
             if current_date_and_time > ban_time:
                 my_profile.update(status='Signed Out', ban_time=new_time_line, attendance_time=current_date_and_time)

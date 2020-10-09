@@ -7,7 +7,7 @@ from .models import Attendance
 def gen_attend(request):
     if request.user.is_superuser:
         attendance = Attendance.objects.all().order_by('-created')
-        return render(request, 'admin-dashboard/gen-attendance.html', {'attendance': attendance})
+        return render(request, 'admin-dashboard/gen-attendance.html', {'attendance': attendance, 'page_title':'General Attendance'})
     
     if not request.user.is_superuser:
         return render(request, 'employee-dashboard/index.html')
