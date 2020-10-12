@@ -107,7 +107,7 @@ def register(request):
             
         else:
         
-            return render(request, 'register.html', {'desig': desig})
+            return render(request, 'register.html', {'desig': desig, 'page_title':'Add New Employee'})
         
     if not request.user.is_superuser:
         sweetify.info(request, 'Welcome back', button='Ok', timer=3000)

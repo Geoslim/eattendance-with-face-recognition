@@ -5,6 +5,7 @@ from account.models import User
 # User = get_user_model()
 import sweetify
 import datetime 
+from attendance.models import Attendance
 # import timeago
 
 def index(request):
@@ -30,9 +31,13 @@ def index(request):
 def admin_dashboard(request):
     if request.user.is_superuser:
         employee_count=len(User.objects.filter(is_superuser = 0))
-        print(employee_count)
+        today_clock_in_count=len(Attendance.objects.filter(status='Signed In'))
+        today_clock_out_count=len(Attendance.objects.filter(status='Signed Out'))
+       
         context = {
             'employee_count':employee_count,
+            'today_clock_in_count':today_clock_in_count,
+            'today_clock_out_count':today_clock_out_count,
             'page_title':'Dashboard',
         }
         return render(request, 'admin-dashboard/index.html', context)
@@ -42,3 +47,63 @@ def admin_dashboard(request):
         return redirect("employee_dashboard")
         # return render(request, 'employee-dashboard/index.html')
 
+@login_required(login_url='login')
+def today(request):
+    if request.user.is_superuser:
+        employee_count=len(User.objects.filter(is_superuser = 0, ))
+        today = datetime.date.today()
+       
+        today_clock_in_count=len(Attendance.objects.filter(created__gte=(today) ,status='Signed In' ))
+        today_clock_out_count=len(Attendance.objects.filter(created__gte=(today) ,status='Signed Out' ))
+       
+        context = {
+            'employee_count':employee_count,
+            'today_clock_in_count':today_clock_in_count,
+            'today_clock_out_count':today_clock_out_count,
+            'today':today,
+            'page_title':'Dashboard',
+        }
+        return render(request, 'admin-dashboard/index.html', context)
+
+    
+@login_required(login_url='login')
+def yesterday(request):
+    if request.user.is_superuser:
+        employee_count=len(User.objects.filter(is_superuser = 0, ))
+        today = datetime.date.today()
+        print(today)
+        yesterday = today - datetime.timedelta(days=1)
+        print(yesterday)
+        yesterday_clock_in_count=len(Attendance.objects.filter(created__range=(yesterday, today) ,status='Signed In' ))
+        yesterday_clock_out_count=len(Attendance.objects.filter(created__range=(yesterday, today) ,status='Signed Out' ))
+       
+        context = {
+            'employee_count':employee_count,
+            'yesterday_clock_in_count':yesterday_clock_in_count,
+            'yesterday_clock_out_count':yesterday_clock_out_count,
+            'yesterday':yesterday,
+            'page_title':'Dashboard',
+        }
+        return render(request, 'admin-dashboard/index.html', context)
+
+
+@login_required(login_url='login')  
+def last_7_days(request):
+    if request.user.is_superuser:
+        employee_count=len(User.objects.filter(is_superuser = 0, ))
+        today = datetime.date.today()
+        last_week = today - datetime.timedelta(days=7)
+        yesterday = today - datetime.timedelta(days=1)
+        last_week_clock_in_count=len(Attendance.objects.filter(created__range=(last_week, today) ,status='Signed In' ))
+        last_week_clock_out_count=len(Attendance.objects.filter(created__range=(last_week, today) ,status='Signed Out' ))
+       
+        context = {
+            'employee_count':employee_count,
+            'last_week_clock_in_count':last_week_clock_in_count,
+            'last_week_clock_out_count':last_week_clock_out_count,
+            'today':today,
+            'last_week':last_week,
+            'yesterday':yesterday,
+            'page_title':'Dashboard',
+        }
+        return render(request, 'admin-dashboard/index.html', context)

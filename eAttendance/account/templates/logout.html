@@ -50,8 +50,17 @@
       <h2>Logged out </h2>
 
       <p>Thanks for spending some quality time with the Web site today.</p> 
-            <p class="login-box-msg">Sign in to start your session</p>
-      <small class="text-muted"> <a href="{% url 'login' %}" class="btn btn-sm btn-success ml-3">Log in again</a></small>
+            <!-- <p class="login-box-msg">Sign in to start your session</p> -->
+      <div class="row">
+        <div class="col-md-6">
+          <small class="text-muted"> <a href="{% url 'index' %}" class="btn btn-sm btn-info ml-3"><i class="fa fa-arrow-left"></i> Home</a></small>
+        </div>
+        
+        <div class="col-md-6">
+          <small class="text-muted"> <a href="{% url 'login' %}" class="btn btn-sm btn-success ml-3">Log in again</a></small>
+        </div>
+      </div>
+      
 
 
    

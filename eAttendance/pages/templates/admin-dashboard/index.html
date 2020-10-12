@@ -6,10 +6,43 @@
 <div class="content-header">
     <div class="container-fluid">
       <div class="row mb-2">
-        <div class="col-sm-6">
+        <div class="col-sm-3">
           <h1 class="m-0 text-dark">Dashboard</h1>
         </div><!-- /.col -->
-        <div class="col-sm-6">
+        <div class="col-sm-4">
+          <!-- <div class="btn-group">
+            <button type="button" class="btn btn-dark">Filter By Date/Time</button>
+            <button type="button" class="btn btn-dark dropdown-toggle dropdown-hover dropdown-icon" data-toggle="dropdown">
+              <span class="sr-only">Toggle Dropdown</span>
+              <div class="dropdown-menu" role="menu">
+                <a class="dropdown-item" href="{% url 'today' %}">Today</a>
+                <a class="dropdown-item" href="{% url 'yesterday' %}">Yesterday</a>
+                <a class="dropdown-item" href="#">Last 7 Days</a>
+                <a class="dropdown-item" href="#">Last Month</a>
+              </div>
+            </button>
+          </div> -->
+          <div class="dropdown">
+            <button onclick="myFunction()" class="dropbtn">Filter <i class="fa fa-caret-down pl-4"></i></button>
+            <div id="myDropdown" class="dropdown-content">
+              <a class="dropdown-item {% if today_clock_in_count %}active{% endif %}" href="{% url 'today' %}">Today</a>
+              <a class="dropdown-item {% if yesterday_clock_in_count %}active{% endif %}" href="{% url 'yesterday' %}">Yesterday</a>
+              <a class="dropdown-item {% if last_week_clock_in_count %}active{% endif %}" href="{% url 'last_7_days' %}">Last 7 Days</a>
+              <a class="dropdown-item " href="">Next </a>
+              
+            </div>
+          </div>
+
+          {% if today_clock_in_count %}
+            {{ today }}
+          {% elif yesterday_clock_in_count %}
+            {{ yesterday }}
+          {% elif last_week_clock_in_count %}
+          {{ last_week }} - {{ yesterday }}
+          {% endif %}
+
+        </div><!-- /.col -->
+        <div class="col-sm-5">
           <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="#">Home</a></li>
             <li class="breadcrumb-item active">Dashboard</li>
@@ -46,7 +79,15 @@
           <!-- small box -->
           <div class="small-box bg-success">
             <div class="inner">
-              <h3><sup style="font-size: 20px"></sup></h3>
+              <h3>
+                {% if today_clock_in_count %}
+                  {{ today_clock_in_count }}
+                {% elif yesterday_clock_in_count %}
+                  {{ yesterday_clock_in_count }}
+                {% elif last_week_clock_in_count %}
+                  {{ last_week_clock_in_count }}
+                {% endif %}
+              </h3>
 
               <p>Clock Ins</p>
             </div>
@@ -61,7 +102,16 @@
           <!-- small box -->
           <div class="small-box bg-warning">
             <div class="inner">
-              <h3></h3>
+              <h3>
+                {% if today_clock_out_count %}
+                  {{ today_clock_out_count }}
+                {% elif yesterday_clock_out_count %}
+                  {{ yesterday_clock_out_count }}
+                {% elif last_week_clock_out_count %}
+                  {{ last_week_clock_out_count }}
+                {% endif %}
+
+              </h3>
 
               <p>Clock Outs</p>
             </div>
