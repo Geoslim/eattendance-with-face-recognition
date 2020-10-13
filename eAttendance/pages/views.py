@@ -107,3 +107,30 @@ def last_7_days(request):
             'page_title':'Dashboard',
         }
         return render(request, 'admin-dashboard/index.html', context)
+    
+@login_required(login_url='login')  
+def custom_range(request):  
+     if request.user.is_superuser:
+        start_date = request.GET['start_date']
+        print(start_date)
+        end_date = request.GET['end_date']
+        employee_count=len(User.objects.filter(is_superuser = 0))
+        today = datetime.date.today()
+        last_week = today - datetime.timedelta(days=7)
+        yesterday = today - datetime.timedelta(days=1)
+       
+        record_day_clock_in = len(Attendance.objects.filter(created__range=(start_date, end_date) ,status='Signed In'))
+        record_day_clock_out = len(Attendance.objects.filter(created__range=(start_date, end_date) ,status='Signed Out'))
+       
+        context = {
+            'employee_count':employee_count,
+            'record_day_clock_in':record_day_clock_in,
+            'record_day_clock_out':record_day_clock_out,
+            'today':today,
+            'start_date':start_date,
+            'end_date':end_date,
+            'last_week':last_week,
+            'yesterday':yesterday,
+            'page_title':'Dashboard',
+        }
+        return render(request, 'admin-dashboard/index.html', context)

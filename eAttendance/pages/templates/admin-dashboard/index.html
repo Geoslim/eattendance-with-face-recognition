@@ -9,40 +9,69 @@
         <div class="col-sm-3">
           <h1 class="m-0 text-dark">Dashboard</h1>
         </div><!-- /.col -->
-        <div class="col-sm-4">
-          <!-- <div class="btn-group">
-            <button type="button" class="btn btn-dark">Filter By Date/Time</button>
-            <button type="button" class="btn btn-dark dropdown-toggle dropdown-hover dropdown-icon" data-toggle="dropdown">
-              <span class="sr-only">Toggle Dropdown</span>
-              <div class="dropdown-menu" role="menu">
-                <a class="dropdown-item" href="{% url 'today' %}">Today</a>
-                <a class="dropdown-item" href="{% url 'yesterday' %}">Yesterday</a>
-                <a class="dropdown-item" href="#">Last 7 Days</a>
-                <a class="dropdown-item" href="#">Last Month</a>
-              </div>
-            </button>
-          </div> -->
+        <div class="col-sm-6">
+         
           <div class="dropdown">
             <button onclick="myFunction()" class="dropbtn">Filter <i class="fa fa-caret-down pl-4"></i></button>
             <div id="myDropdown" class="dropdown-content">
               <a class="dropdown-item {% if today_clock_in_count %}active{% endif %}" href="{% url 'today' %}">Today</a>
               <a class="dropdown-item {% if yesterday_clock_in_count %}active{% endif %}" href="{% url 'yesterday' %}">Yesterday</a>
               <a class="dropdown-item {% if last_week_clock_in_count %}active{% endif %}" href="{% url 'last_7_days' %}">Last 7 Days</a>
-              <a class="dropdown-item " href="">Next </a>
+              <!-- <a class="dropdown-item" href="">Last 30 Days</a>
+              <a class="dropdown-item" href="">This Month</a>
+              <a class="dropdown-item" href="">Last Month</a> -->
+              <a class="dropdown-item {% if record_day_clock_in %}active{% endif %}" href="#" id="custom_link">Custom Range</a>
+            
               
             </div>
           </div>
 
-          {% if today_clock_in_count %}
+          {% if today_clock_in_count or today_clock_out_count %}
             {{ today }}
+            
           {% elif yesterday_clock_in_count %}
             {{ yesterday }}
+
           {% elif last_week_clock_in_count %}
-          {{ last_week }} - {{ yesterday }}
+            {{ last_week }} - {{ yesterday }}
+
+          {% elif record_day_clock_in %}
+            {{ start_date }} - {{ end_date }}
+
           {% endif %}
 
+          
+          <form action="{% url 'custom_range' %}" method="GET" class="inline-forn" id="custom_form" style="display: none;">
+           
+            <div class="row">
+             
+                <div class="col-md-5">
+                  <div class="form-group">
+                    <!-- <label for="start_date">Start Date</label> -->
+                    <input type="date" name="start_date" class="form-control" id="start_date">
+    
+                  </div>
+                </div>
+
+
+                <div class="col-md-5">
+                  <div class="form-group">
+                    <!-- <label for="end_date">End Date</label> -->
+                    <input type="date" name="end_date" class="form-control" id="end_date">
+                  </div>
+                 
+               </div>
+               <div class="col-md-1">
+                <button type="submit" class="btn btn-sm btn-dark">Search</button>
+              </div>
+                
+              
+            </div>
+           
+          </form>
+
         </div><!-- /.col -->
-        <div class="col-sm-5">
+        <div class="col-sm-3">
           <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="#">Home</a></li>
             <li class="breadcrumb-item active">Dashboard</li>
@@ -82,10 +111,16 @@
               <h3>
                 {% if today_clock_in_count %}
                   {{ today_clock_in_count }}
+
                 {% elif yesterday_clock_in_count %}
                   {{ yesterday_clock_in_count }}
+
                 {% elif last_week_clock_in_count %}
                   {{ last_week_clock_in_count }}
+
+                {% elif record_day_clock_in %}
+                  {{ record_day_clock_in}}
+
                 {% endif %}
               </h3>
 
@@ -105,10 +140,16 @@
               <h3>
                 {% if today_clock_out_count %}
                   {{ today_clock_out_count }}
+
                 {% elif yesterday_clock_out_count %}
                   {{ yesterday_clock_out_count }}
+
                 {% elif last_week_clock_out_count %}
                   {{ last_week_clock_out_count }}
+
+                {% elif record_day_clock_out %}
+                  {{ record_day_clock_out}}
+                  
                 {% endif %}
 
               </h3>
