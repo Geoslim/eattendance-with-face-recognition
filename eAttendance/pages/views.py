@@ -31,13 +31,16 @@ def index(request):
 def admin_dashboard(request):
     if request.user.is_superuser:
         employee_count=len(User.objects.filter(is_superuser = 0))
-        today_clock_in_count=len(Attendance.objects.filter(status='Signed In'))
-        today_clock_out_count=len(Attendance.objects.filter(status='Signed Out'))
-       
+        clock_in_count=len(Attendance.objects.filter(status='Signed In'))
+        clock_out_count=len(Attendance.objects.filter(status='Signed Out'))
+        today = datetime.date.today()
+        yesterday = today - datetime.timedelta(days=1)
         context = {
             'employee_count':employee_count,
-            'today_clock_in_count':today_clock_in_count,
-            'today_clock_out_count':today_clock_out_count,
+            'clock_in_count':clock_in_count,
+            'clock_out_count':clock_out_count,
+            'today':today,
+            'yesterday':yesterday,
             'page_title':'Dashboard',
         }
         return render(request, 'admin-dashboard/index.html', context)
@@ -50,9 +53,9 @@ def admin_dashboard(request):
 @login_required(login_url='login')
 def today(request):
     if request.user.is_superuser:
-        employee_count=len(User.objects.filter(is_superuser = 0, ))
+        employee_count=len(User.objects.filter(is_superuser = 0,))
         today = datetime.date.today()
-       
+        
         today_clock_in_count=len(Attendance.objects.filter(created__gte=(today) ,status='Signed In' ))
         today_clock_out_count=len(Attendance.objects.filter(created__gte=(today) ,status='Signed Out' ))
        
@@ -111,16 +114,20 @@ def last_7_days(request):
 @login_required(login_url='login')  
 def custom_range(request):  
      if request.user.is_superuser:
+        
         start_date = request.GET['start_date']
-        print(start_date)
         end_date = request.GET['end_date']
+        if start_date == '' or end_date =='':
+            sweetify.info(request, 'You have to select both dates', button='Ok', timer=3000)
+            return redirect("admin_dashboard")  
         employee_count=len(User.objects.filter(is_superuser = 0))
         today = datetime.date.today()
         last_week = today - datetime.timedelta(days=7)
         yesterday = today - datetime.timedelta(days=1)
+        new_end_date = datetime.datetime.strptime(end_date, '%Y-%m-%d').date() + datetime.timedelta(days=1)
        
-        record_day_clock_in = len(Attendance.objects.filter(created__range=(start_date, end_date) ,status='Signed In'))
-        record_day_clock_out = len(Attendance.objects.filter(created__range=(start_date, end_date) ,status='Signed Out'))
+        record_day_clock_in = len(Attendance.objects.filter(created__range=(start_date, new_end_date) ,status='Signed In'))
+        record_day_clock_out = len(Attendance.objects.filter(created__range=(start_date, new_end_date) ,status='Signed Out'))
        
         context = {
             'employee_count':employee_count,

@@ -47,21 +47,26 @@ def verify(request):
             last_name = user.last_name
             status = user.profile.status
             attendance_time = user.profile.attendance_time
+            lateness = user.profile.lateness_ago
             
         context = {'first_name':first_name,
                     'last_name':last_name,
                     'status':status,
                     'attendance_time':attendance_time,
+                    'lateness':lateness,
                     }
         return context   
      
-    def add_attendance(user_id, fullname, email, designation, status):
+    def add_attendance(user_id, fullname, email, designation, status, late=False, lateness=None):
         attendance = Attendance.objects.create(
                         user_id = user_id,
                         fullname = fullname,
                         email = email,
                         designation = designation,
-                        status = status
+                        status = status,
+                        late = late,
+                        lateness = lateness,
+                       
                     )
         attendance.save()
         print("Attendance recorded!!!")
@@ -102,15 +107,19 @@ def verify(request):
                
                 if current_date_and_time > lateness_benchmark:
                     
-                    late = timeago.format(lateness_benchmark, current_date_and_time)
-                    print(f"You are late ooo..You passed you lateness benchmark  {late}.")
+                    late = True
+                    lateness_ago = timeago.format(lateness_benchmark, current_date_and_time)
+                    late_duration = lateness_ago.rsplit(' ', 3)[0]
+                    late_duration_2 = lateness_ago.rsplit(' ', 3)[1]
+                    lateness = late_duration + ' ' + late_duration_2
+                    print(f"You are late ooo..You passed you lateness benchmark  {lateness_ago}.")
                     
-                my_profile.update(status='Signed In', ban_time=new_time_line, attendance_time=current_date_and_time)
-                add_attendance(user_id, fullname, email, designation, "Signed In")
+                my_profile.update(status='Signed In', ban_time=new_time_line, attendance_time=current_date_and_time, lateness_ago=lateness_ago)
+                add_attendance(user_id, fullname, email, designation, "Signed In", late, lateness)
                 
         elif status == 'Signed In':
             if current_date_and_time > ban_time:
-                my_profile.update(status='Signed Out', ban_time=new_time_line, attendance_time=current_date_and_time)
+                my_profile.update(status='Signed Out', ban_time=new_time_line, attendance_time=current_date_and_time, lateness_ago=None)
                 add_attendance(user_id, fullname, email, designation, "Signed Out")
          
         # get current user details after marking attendance       

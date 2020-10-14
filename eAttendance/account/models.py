@@ -28,6 +28,7 @@ class Profile(models.Model):
     status = models.CharField(max_length=100, default='Signed Out' ,blank=True)
     ban_time = models.DateTimeField(auto_now_add=True)
     attendance_time = models.DateTimeField(default=None, null=True, blank=True)
+    lateness_ago = models.CharField(max_length=20, default=None, blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 

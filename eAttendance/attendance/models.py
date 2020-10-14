@@ -11,6 +11,8 @@ class Attendance(models.Model):
     email = models.CharField(max_length=110, blank=True, null=True)
     designation = models.CharField(max_length=110, blank=True, null=True)
     status = models.CharField(max_length=110, blank=True, null=True)
+    late = models.BooleanField(default=False)
+    lateness = models.CharField(max_length=20, blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):

@@ -50,6 +50,11 @@
             <p class="login-box-msg">{{ first_name }} {{ last_name }}</p>
             <p class="login-box-msg">{{ status }}</p>
             <p class="login-box-msg">{{ attendance_time }}</p>
+            
+            {% if lateness is not None %}
+              <hr/>
+              <p class="login-box-msg">You passed your lateness benchmark {{ lateness }}.</p>
+            {% endif %}
            
           </div>
           <!-- /.login-card-body -->

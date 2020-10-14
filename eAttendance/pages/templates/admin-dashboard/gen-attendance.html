@@ -42,7 +42,8 @@
                           <th>Designation</th>
                           <!-- <th>Office Hour</th> -->
                           <th>Status</th>
-                          <!-- <th>Lateness</th> -->
+                          <th>Late</th>
+                          <th>Lateness</th>
                           <th>Date | Time</th>
                         </tr>
                       </thead>
@@ -63,14 +64,20 @@
                                 <p class="badge badge-warning">{{ attend.status }}</p>
                               {% endif %}
                           </td>
-                          <!-- <td>
-                            
+                          <td>
+                              {% if attend.late %}
                                 <p class="badge badge-warning">Late</p>
-                             
-                                <p class="badge badge-success">Not Late</p> 
+                              {% endif %}
+                                <!-- <p class="badge badge-success">Not Late</p>  -->
                               
-                          </td> -->
+                          </td>
                           
+                          <td>
+                              {% if attend.lateness is not None %}
+                                {{ attend.lateness }}
+                              {% endif %}
+                          </td>
+
                           <td>{{ attend.created }}</td>
                         </tr>
                         {% endfor %}
