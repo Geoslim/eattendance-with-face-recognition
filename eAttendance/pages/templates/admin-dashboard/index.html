@@ -201,14 +201,52 @@
           <!-- small box -->
           <div class="small-box bg-danger">
             <div class="inner">
-              <h3></h3>
+              <h3>
+
+                {% if clock_in_count %}
+                  {{ late }}
+
+                {% elif today_clock_in_count %}
+                  {{ late }}
+
+                {% elif yesterday_clock_in_count %}
+                  {{ late }}
+
+                {% elif last_week_clock_in_count %}
+                  {{ late }}
+                {% elif record_day_clock_in %}
+                  {{ late }}
+                {% else %}
+                  0
+                {% endif %}
+
+              </h3>
 
               <p>Late</p>
             </div>
             <div class="icon">
               <i class="fa fa-stopwatch"></i>
             </div>
-            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            <a href="
+            
+              {% if clock_in_count %}
+                {% url 'lateness' %}
+
+              {% elif today_clock_in_count %}
+                {% url 'lateness' today %}
+
+              {% elif yesterday_clock_in_count %}
+                {% url 'lateness' yesterday %}
+
+              {% elif last_week_clock_in_count %}
+                {% url 'lateness' last_week yesterday %}
+
+              {% elif record_day_clock_in %}
+                {% url 'custom_lateness' start_date end_date %}
+
+              {% endif %}
+
+            " class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
           </div>
         </div>
         <!-- ./col -->

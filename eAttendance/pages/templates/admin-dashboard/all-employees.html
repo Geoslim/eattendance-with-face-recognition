@@ -51,7 +51,7 @@
                       <tbody>
                         {% for employee in all_employees %}
                         <tr>
-                          <td></td>
+                          <td>{{ forloop.counter }}</td>
                           <td><img src="{{ employee.profile_image.url }}" width="80px"></td>
                           <td>{{ employee.last_name }} {{ employee.first_name }}</td>
                           <td>{{ employee.designation.title }}</td>

@@ -85,7 +85,7 @@
                       
                         {% for desig in designations %}
                         <tr>
-                          <td></td>
+                          <td>{{ forloop.counter }}</td>
                           <td>{{ desig.title }}</td>
                           <td>{{ desig.time_in }} - {{ desig.time_out }}</td>
                           <td>{{ desig.lateness_benchmark }}</td>

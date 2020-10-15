@@ -19,7 +19,8 @@ def gen_attend(request, param=None, param_end=None):
         
         if param == None:
             attendance = Attendance.objects.all().order_by('-created')
-            return render(request, 'admin-dashboard/gen-attendance.html', {'attendance': attendance, 'page_title':'General Attendance'})
+            # late=len(Attendance.objects.filter(late=True))
+            return render(request, 'admin-dashboard/gen-attendance.html', {'attendance': attendance,'page_title':'General Attendance'})
         
         if new_param == today:
             attendance = Attendance.objects.filter(created__gte=(param)).order_by('-created')
@@ -55,4 +56,58 @@ def custom_gen_attend(request, param_start, param_end):
 
     if not request.user.is_superuser:
         return render(request, 'employee-dashboard/index.html')
+
+
+
+@login_required(login_url='login')
+def lateness(request, late_param=None, late_param_end=None):
+    
+    if request.user.is_superuser:
+        today = datetime.date.today()
+        last_week = today - datetime.timedelta(days=7)
+        yesterday = today - datetime.timedelta(days=1)
+        
+        if late_param is not None:
+            new_param = datetime.datetime.strptime(late_param, '%Y-%m-%d').date()
+        
+        if late_param == None:
+            attendance = Attendance.objects.filter(late=True).order_by('-created')
+            return render(request, 'admin-dashboard/gen-attendance.html', {'attendance': attendance, 'page_title':'General Attendance'})
+        
+        if new_param == today:
+            attendance = Attendance.objects.filter(late=True, created__gte=(late_param)).order_by('-created')
+            return render(request, 'admin-dashboard/gen-attendance.html', {'attendance': attendance, 'page_title':'General Attendance'})
+        
+        if new_param == yesterday:
+            attendance = Attendance.objects.filter(late=True, created__range=(yesterday, new_param)).order_by('-created')
+            return render(request, 'admin-dashboard/gen-attendance.html', {'attendance': attendance, 'page_title':'General Attendance'})
+        
+        if new_param == last_week:
+            attendance = Attendance.objects.filter(late=True, created__range=(last_week, today)).order_by('-created')
+            return render(request, 'admin-dashboard/gen-attendance.html', {'attendance': attendance, 'page_title':'General Attendance'})
+        
+        return render(request, 'admin-dashboard/index.html')
+
+    if not request.user.is_superuser:
+        return render(request, 'employee-dashboard/index.html')
+    
+
+    
+@login_required(login_url='login')
+def custom_lateness(request, late_param_start, late_param_end):
+    
+    if request.user.is_superuser:
+        if late_param_start is not None:
+            
+            start_param = datetime.datetime.strptime(late_param_start, '%Y-%m-%d').date() 
+            end_param = datetime.datetime.strptime(late_param_end, '%Y-%m-%d').date() + datetime.timedelta(days=1)
+            
+            attendance = Attendance.objects.filter(late=True, created__range=(late_param_start, late_param_end)).order_by('-created')
+            return render(request, 'admin-dashboard/gen-attendance.html', {'attendance': attendance, 'page_title':'General Attendance'})
+        
+        return render(request, 'admin-dashboard/index.html')
+
+    if not request.user.is_superuser:
+        return render(request, 'employee-dashboard/index.html')
+
 

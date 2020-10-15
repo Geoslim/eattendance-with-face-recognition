@@ -20,7 +20,6 @@ def index(request):
     # print(datetime_object_3)
     # print(datetime_object_4)
     
-    
     # print()
     # print (timeago.format(datetime_object_4, datetime_object_3))
     
@@ -33,6 +32,7 @@ def admin_dashboard(request):
         employee_count=len(User.objects.filter(is_superuser = 0))
         clock_in_count=len(Attendance.objects.filter(status='Signed In'))
         clock_out_count=len(Attendance.objects.filter(status='Signed Out'))
+        late=len(Attendance.objects.filter(late=True))
         today = datetime.date.today()
         yesterday = today - datetime.timedelta(days=1)
         context = {
@@ -41,6 +41,7 @@ def admin_dashboard(request):
             'clock_out_count':clock_out_count,
             'today':today,
             'yesterday':yesterday,
+            'late':late,
             'page_title':'Dashboard',
         }
         return render(request, 'admin-dashboard/index.html', context)
@@ -58,12 +59,13 @@ def today(request):
         
         today_clock_in_count=len(Attendance.objects.filter(created__gte=(today) ,status='Signed In' ))
         today_clock_out_count=len(Attendance.objects.filter(created__gte=(today) ,status='Signed Out' ))
-       
+        late=len(Attendance.objects.filter(created__gte=(today), late=True))
         context = {
             'employee_count':employee_count,
             'today_clock_in_count':today_clock_in_count,
             'today_clock_out_count':today_clock_out_count,
             'today':today,
+            'late':late,
             'page_title':'Dashboard',
         }
         return render(request, 'admin-dashboard/index.html', context)
@@ -74,17 +76,17 @@ def yesterday(request):
     if request.user.is_superuser:
         employee_count=len(User.objects.filter(is_superuser = 0, ))
         today = datetime.date.today()
-        print(today)
         yesterday = today - datetime.timedelta(days=1)
-        print(yesterday)
         yesterday_clock_in_count=len(Attendance.objects.filter(created__range=(yesterday, today) ,status='Signed In' ))
         yesterday_clock_out_count=len(Attendance.objects.filter(created__range=(yesterday, today) ,status='Signed Out' ))
-       
+        late=len(Attendance.objects.filter(created__range=(yesterday, today), late=True))
+        
         context = {
             'employee_count':employee_count,
             'yesterday_clock_in_count':yesterday_clock_in_count,
             'yesterday_clock_out_count':yesterday_clock_out_count,
             'yesterday':yesterday,
+            'late':late,
             'page_title':'Dashboard',
         }
         return render(request, 'admin-dashboard/index.html', context)
@@ -99,7 +101,8 @@ def last_7_days(request):
         yesterday = today - datetime.timedelta(days=1)
         last_week_clock_in_count=len(Attendance.objects.filter(created__range=(last_week, today) ,status='Signed In' ))
         last_week_clock_out_count=len(Attendance.objects.filter(created__range=(last_week, today) ,status='Signed Out' ))
-       
+        late=len(Attendance.objects.filter(created__range=(last_week, today), late=True))
+        
         context = {
             'employee_count':employee_count,
             'last_week_clock_in_count':last_week_clock_in_count,
@@ -107,6 +110,7 @@ def last_7_days(request):
             'today':today,
             'last_week':last_week,
             'yesterday':yesterday,
+            'late':late,
             'page_title':'Dashboard',
         }
         return render(request, 'admin-dashboard/index.html', context)
@@ -128,7 +132,8 @@ def custom_range(request):
        
         record_day_clock_in = len(Attendance.objects.filter(created__range=(start_date, new_end_date) ,status='Signed In'))
         record_day_clock_out = len(Attendance.objects.filter(created__range=(start_date, new_end_date) ,status='Signed Out'))
-       
+        late=len(Attendance.objects.filter(created__range=(start_date, new_end_date), late=True))
+        
         context = {
             'employee_count':employee_count,
             'record_day_clock_in':record_day_clock_in,
@@ -138,6 +143,7 @@ def custom_range(request):
             'end_date':end_date,
             'last_week':last_week,
             'yesterday':yesterday,
+            'late':late,
             'page_title':'Dashboard',
         }
         return render(request, 'admin-dashboard/index.html', context)

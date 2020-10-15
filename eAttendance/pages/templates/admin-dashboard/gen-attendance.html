@@ -50,7 +50,7 @@
                       <tbody>
                         {% for attend in attendance %}
                         <tr>
-                          <td></td>
+                          <td>{{ forloop.counter }}</td>
                           <td>{{ attend.fullname }}</td>
                           <td>{{ attend.email }}</td>
                           <td>{{ attend.designation }}</td>
