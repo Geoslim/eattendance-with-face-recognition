@@ -102,7 +102,7 @@ def custom_lateness(request, late_param_start, late_param_end):
             start_param = datetime.datetime.strptime(late_param_start, '%Y-%m-%d').date() 
             end_param = datetime.datetime.strptime(late_param_end, '%Y-%m-%d').date() + datetime.timedelta(days=1)
             
-            attendance = Attendance.objects.filter(late=True, created__range=(late_param_start, late_param_end)).order_by('-created')
+            attendance = Attendance.objects.filter(late=True, created__range=(start_param, end_param)).order_by('-created')
             return render(request, 'admin-dashboard/gen-attendance.html', {'attendance': attendance, 'page_title':'General Attendance'})
         
         return render(request, 'admin-dashboard/index.html')

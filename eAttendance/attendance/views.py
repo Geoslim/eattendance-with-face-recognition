@@ -20,6 +20,8 @@ def verify(request):
     images = []
 
     class_names = []
+    
+    name = ''
 
     my_list = os.listdir(path)
 
@@ -40,16 +42,28 @@ def verify(request):
             encode_list.append(encode)
         return encode_list
 
-    def get_current_user(name):
-        user_profile = User.objects.filter(username=f'{name.lower()}')
-        for user in user_profile:
-            first_name = user.first_name
-            last_name = user.last_name
-            status = user.profile.status
-            attendance_time = user.profile.attendance_time
-            lateness = user.profile.lateness_ago
+    def get_current_user(name=None):
+        if name == None:
+            attend_status_fail = True
+            sys_status = 'Attendance not Captured. Try Again!!'
+            context = {'attend_status_fail':attend_status_fail,'sys_status':sys_status,}
+            return context
+           
+        else:
+            attend_status_success = True
+            sys_status = 'Attendance Captured.'
+            user_profile = User.objects.filter(username=f'{name.lower()}')
+            for user in user_profile:
+                first_name = user.first_name
+                last_name = user.last_name
+                status = user.profile.status
+                attendance_time = user.profile.attendance_time
+                lateness = user.profile.lateness_ago
             
-        context = {'first_name':first_name,
+            context = {
+                    'attend_status_success':attend_status_success,
+                    'sys_status':sys_status,
+                    'first_name':first_name,
                     'last_name':last_name,
                     'status':status,
                     'attendance_time':attendance_time,
@@ -114,9 +128,15 @@ def verify(request):
                     lateness = late_duration + ' ' + late_duration_2
                     print(f"You are late ooo..You passed you lateness benchmark  {lateness_ago}.")
                     
-                my_profile.update(status='Signed In', ban_time=new_time_line, attendance_time=current_date_and_time, lateness_ago=lateness_ago)
-                add_attendance(user_id, fullname, email, designation, "Signed In", late, lateness)
+                    my_profile.update(status='Signed In', ban_time=new_time_line, attendance_time=current_date_and_time, lateness_ago=lateness_ago)
+                    add_attendance(user_id, fullname, email, designation, "Signed In", late, lateness)
                 
+                if current_date_and_time < lateness_benchmark:
+                    
+                    late = False                    
+                    my_profile.update(status='Signed In', ban_time=new_time_line, attendance_time=current_date_and_time, lateness_ago=None)
+                    add_attendance(user_id, fullname, email, designation, "Signed In")
+                    
         elif status == 'Signed In':
             if current_date_and_time > ban_time:
                 my_profile.update(status='Signed Out', ban_time=new_time_line, attendance_time=current_date_and_time, lateness_ago=None)
@@ -179,5 +199,8 @@ def verify(request):
         # Release handle to the webcam
     cap.release()
     cv2.destroyAllWindows()
-    context = get_current_user(name.lower())
+    if name == 'Unknown' or name =='':
+        context = get_current_user()
+    else:
+        context = get_current_user(name.lower())
     return render(request, 'index.html', context)

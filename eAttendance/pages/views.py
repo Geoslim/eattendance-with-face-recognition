@@ -22,9 +22,10 @@ def index(request):
     
     # print()
     # print (timeago.format(datetime_object_4, datetime_object_3))
-    
-    # context = {'page_title':'George'}
-    return render(request, 'index.html')
+    attend_status_fail = False
+    attend_status_success = False
+    context = {'attend_status_fail':attend_status_fail, 'attend_status_success':attend_status_success}
+    return render(request, 'index.html', context)
 
 @login_required(login_url='login')
 def admin_dashboard(request):
