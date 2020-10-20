@@ -8,20 +8,8 @@ import datetime
 from attendance.models import Attendance
 # import timeago
 
+
 def index(request):
-    # datetime_str_1 = '12:55:26'
-    # datetime_str_2 = '08:30:00'
-    # datetime_object_1 = datetime.datetime.strptime(datetime_str_1, '%H:%M:%S').time()
-    # datetime_object_2 = datetime.datetime.strptime(datetime_str_2, '%H:%M:%S').time()
-    # datetime_object_3 =  datetime.datetime.combine(datetime.datetime.now(), datetime_object_1)
-    # datetime_object_4 =  datetime.datetime.combine(datetime.datetime.now(), datetime_object_2)
-    # print(datetime_object_1)
-    # print(datetime_object_2)
-    # print(datetime_object_3)
-    # print(datetime_object_4)
-    
-    # print()
-    # print (timeago.format(datetime_object_4, datetime_object_3))
     attend_status_fail = False
     attend_status_success = False
     context = {'attend_status_fail':attend_status_fail, 'attend_status_success':attend_status_success}
@@ -148,3 +136,17 @@ def custom_range(request):
             'page_title':'Dashboard',
         }
         return render(request, 'admin-dashboard/index.html', context)
+    
+  # datetime_str_1 = '12:55:26'
+    # datetime_str_2 = '08:30:00'
+    # datetime_object_1 = datetime.datetime.strptime(datetime_str_1, '%H:%M:%S').time()
+    # datetime_object_2 = datetime.datetime.strptime(datetime_str_2, '%H:%M:%S').time()
+    # datetime_object_3 =  datetime.datetime.combine(datetime.datetime.now(), datetime_object_1)
+    # datetime_object_4 =  datetime.datetime.combine(datetime.datetime.now(), datetime_object_2)
+    # print(datetime_object_1)
+    # print(datetime_object_2)
+    # print(datetime_object_3)
+    # print(datetime_object_4)
+    
+    # print()
+    # print (timeago.format(datetime_object_4, datetime_object_3))

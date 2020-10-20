@@ -3,9 +3,11 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from account.models import User
 from .models import Task
-# from attendance.models import Attendance
 import sweetify
 
+from twilio.rest import Client
+import os
+import environ
 
 @login_required(login_url='login')
 def add_task(request, user_id):
@@ -24,6 +26,17 @@ def add_task(request, user_id):
                 )
            
             task.save()
+            env = environ.Env()
+            environ.Env().read_env()
+            TWILIO_NUMBER = env("TWILIO_NUMBER")
+            
+        # client credentials are read from TWILIO_ACCOUNT_SID and AUTH_TOKEN
+            twilio  = Client()
+
+            twilio.messages.create(
+                from_=TWILIO_NUMBER,
+                to='whatsapp:+2347030102959',
+                body=f'New Task Added. {task}. The task is marked as {priority}')
             
             sweetify.info(request, f"Task added to {employee.username} Successfully", button='Ok', timer=3000)
             return redirect("all_employees")
